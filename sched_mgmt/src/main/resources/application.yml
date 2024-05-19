@@ -1,0 +1,13 @@
+spring:
+    application:
+        name: sched_mgmt
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://localhost:5433/postgres
+        username: postgres
+        password: password
+mybatis:
+    configuration:
+        map-underscore-to-camel-case: true
+    mapper-locations: classpath*:/mapper/postgreSQL/*.xml
+    type-aliases-package: d_tanabe.sched_mgmt.model

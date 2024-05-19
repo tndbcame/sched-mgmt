@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/user/signup.css}">
+<link rel="stylesheet" th:href="@{/css/common/header.css}">
+<title>ユーザーの追加</title>
+</head>
+<body>
+	<header class="header_bg">
+		<nav layout:replace="~{common/header::header}"></nav>
+	</header>
+	<div class="wrap">
+		<a th:href="@{'/management'}">管理画面へ戻る</a>
+		<div class="insert-bg">
+			<h1>ユーザー追加</h1>
+			<form action="#" th:action="@{/signup}" method="post" th:object="${signUpForm}">
+				<div>
+					<div th:errors="*{accountName}" class="errorMsg"></div>
+					<label>アカウント名</label> 
+					<br>
+					<input type="text" name="account_name" id="account" th:field="*{accountName}" placeholder="例）accout_tarou"/>
+				</div>
+				<div>
+					<div th:errors="*{userName}" class="errorMsg"></div>
+					<label class="label_1">氏名</label> 
+					<br>
+					<input type="text" name="user_name" id="name" th:field="*{userName}" placeholder="例）太郎"/>
+				</div>
+				<div>
+					<div th:errors="*{password}" class="errorMsg"></div>
+					<label>パスワード</label>
+					<br>
+					<input type="password" name="password" id="pass" th:field="*{password}" placeholder="例）password"/>
+				</div>
+				<div>
+					<label class="label_2">管理者</label> 
+					<br>
+					<input type="checkbox" name="admin_flg" id="admin" class="checkbox_color" th:field="*{admin}"/>
+				</div>
+				<button type="submit" id="signup">登録</button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

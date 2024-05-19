@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" th:href="@{/css/schedule/schedule.css}">
+<link rel="stylesheet" th:href="@{/css/common/header.css}">
+<script th:src="@{/js/plugin/jquery-3.7.1.min.js}"></script>
+<meta charset="UTF-8">
+<meta th:name="_csrf" th:content="${_csrf.token}">
+<meta th:name="_csrf_header" th:content="${_csrf.headerName}">
+<title>スケジュール</title>
+</head>
+<body>
+	<header class="header_bg">
+		<div class="container">
+			<nav layout:replace="~{common/header::header}"></nav>
+		</div>
+	</header>
+	<div class="wrap">
+		<div>		
+			<h1>
+				<span th:text="${user_name}"></span>
+				さんのスケジュール画面
+			</h1>
+			<a th:href="@{'/management'}">管理画面</a>
+		</div>
+		<form action="?" method="post">
+			<!-- アカウント名とユーザーＩＤはスケジュール登録時に使うのでhiddenで送る -->
+			<input type="hidden" id="user_id" th:value="${user_id}">
+			<input type="hidden" id="account_name" th:value="${account_name}">
+			<div class="display">
+				<div>				
+					<label>年</label>
+					<div class="select-box-wrap">
+						<select name="Year" id="year" class="select-box">
+							<th:block th:each="i : ${#numbers.sequence(2023,2030,1)}">
+								<option th:text="${i}"></option>
+							</th:block>
+						</select>
+					</div> 
+				</div>
+				<div>	
+					<label>月</label>
+					<div class="select-box-wrap"> 
+						<select name="Month" id="month" class="select-box">
+							<th:block th:each="i : ${#numbers.sequence(1,12,1)}">
+								<option th:text="${i}"></option>
+							</th:block>
+						</select> 
+					</div> 
+				</div>
+				<button type="button" id="displaySchedule" formaction="Schedule" class="button1">表示</button>
+			</div>
+			<div class="wrap2">
+				<div>
+					<label>日</label>
+					<div class="select-box-wrap"> 
+						<select name="Day" id="day" class="select-box">
+							<th:block th:each="i : ${#numbers.sequence(1,31,1)}">
+								<option th:text="${i}"></option>
+							</th:block>
+						</select>
+					</div> 
+				</div>
+				<input type="text" name="schedule" id="scheduleContent" placeholder="予定を入力"> 
+				<div id="errorMsg" class="errorMsg"></div>
+				<button type="button" formaction="insertSchedule" id="insertSchedule" class="button2">登録</button>
+			</div>
+		</form>
+		<div class="table-wrap">
+			<table id="tbl" border="1" class="tb-style">
+				<th:block th:each="i : ${#numbers.sequence(1,31,1)}">
+					<tr>
+						<td th:text="${i}"></td>
+						<td th:id="${i}">
+							<th:block th:each="scheduleEntry : ${scheduleMap}">
+								<th:block th:if="${scheduleEntry.key == i}" th:text="${scheduleEntry.value}">
+								</th:block>
+							</th:block>
+						</td>
+					</tr>
+				</th:block>
+			</table>
+		</div>
+	</div>
+	<script th:src="@{/js/schedule.js}"></script>
+</body>
+</html>

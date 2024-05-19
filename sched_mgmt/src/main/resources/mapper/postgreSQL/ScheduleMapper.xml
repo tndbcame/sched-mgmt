@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.sample.repository.ScheduleMapper">
+	<!-- マッピング -->
+	<resultMap type="com.example.sample.model.Schedule"
+		id="userSchedule">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" />
+		<result column="account_name" property="accountName" />
+		<result column="date" property="date" />
+		<result column="schedule" property="schedule" />
+	</resultMap>
+
+	<!-- スケージュールを登録する -->
+	<insert id="insertSchedule">
+		insert into schedule(user_id, account_name, date,
+		schedule)
+		values (#{userId}, #{accountName}, #{date}, #{schedule})
+	</insert>
+
+	<!-- スケージュールをすべて取得する -->
+	<select id="selectSchedule" resultType="Schedule">
+		select * from schedule 
+		where user_id = #{userId} and
+		date between #{minimumDate} and #{maximumDate}
+		order by id
+	</select>
+</mapper>
