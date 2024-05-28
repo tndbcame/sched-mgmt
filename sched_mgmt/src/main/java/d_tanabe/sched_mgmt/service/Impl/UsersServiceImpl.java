@@ -78,14 +78,14 @@ public class UsersServiceImpl implements UsersService {
 		users.setPassword(hash);
 
 		//権限を設定
-		String role = "USER";
+		String role = "2";
 		if (admin) {
-			role = "ADMIN";
+			role = "1";
 		}
 		users.setRole(role);
 
 		//ステータスは有効で登録
-		users.setStatus("VALID");
+		users.setStatus("1");
 
 		usersMapper.signUpUser(users);
 	}
@@ -97,16 +97,16 @@ public class UsersServiceImpl implements UsersService {
 	public void upDateUser(Users users, boolean adminFlg, boolean statusFlg) {
 
 		//権限を設定
-		String role = "USER";
+		String role = "2";
 		if (adminFlg) {
-			role = "ADMIN";
+			role = "1";
 		}
 		users.setRole(role);
 
 		//状態を設定
-		String status = "VALID";
+		String status = "1";
 		if (statusFlg) {
-			status = "INVALID";
+			status = "2";
 		}
 		users.setStatus(status);
 

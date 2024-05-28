@@ -1,4 +1,4 @@
-package d_tanabe.sched_mgmt.controller;
+package d_tanabe.sched_mgmt.controller.user;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import d_tanabe.sched_mgmt.config.UsersDetails;
-import d_tanabe.sched_mgmt.form.UserSearchForm;
+import d_tanabe.sched_mgmt.form.user.ManagementForm;
 import d_tanabe.sched_mgmt.model.Users;
 import d_tanabe.sched_mgmt.service.UsersService;
 import d_tanabe.sched_mgmt.validation.CommonValidation;
@@ -50,7 +50,7 @@ public class ManagementController {
 	 * @return user/management
 	 */
 	@GetMapping("/management")
-	public String getManagement(@ModelAttribute UserSearchForm form,
+	public String getManagement(@ModelAttribute ManagementForm form,
 			@AuthenticationPrincipal UsersDetails user,
 			Model model,
 			HttpServletRequest request) {
@@ -75,7 +75,7 @@ public class ManagementController {
 		Users users = new Users();
 
 		//初期表示は無効ユーザーも含んだ状態で検索
-		users.setStatus("INVALID");
+		users.setStatus("2");
 
 		//検索条件(初期値)を設定する
 		model.addAttribute("userIdSearchCondition", form.getUserId());
@@ -89,6 +89,7 @@ public class ManagementController {
 		model.addAttribute("usersList", usersList);
 
 		//表示するページ数をセット
+		System.out.println(perPage + usersList.get(0).getTotalUsers());
 		int totalPage = (int) Math.ceil(
 				usersList.get(0).getTotalUsers() / (double) perPage);
 		model.addAttribute("totalPage", totalPage);
@@ -114,7 +115,7 @@ public class ManagementController {
 	 * @return user/management
 	 */
 	@GetMapping("/userSearch")
-	public String searchUsers(@ModelAttribute UserSearchForm form,
+	public String searchUsers(@ModelAttribute ManagementForm form,
 			@AuthenticationPrincipal UsersDetails user,
 			Model model,
 			HttpServletRequest request) {
@@ -130,7 +131,7 @@ public class ManagementController {
 		users.setAccountName(form.getAccountName());
 		users.setUserName(form.getUserName());
 		if (form.isStatus()) {
-			users.setStatus("INVALID");
+			users.setStatus("2");
 		}
 
 		//検索条件は保持
@@ -175,7 +176,7 @@ public class ManagementController {
 	 * @return user/management
 	 */
 	@GetMapping("/pagingUsers")
-	public String pagingUsers(@ModelAttribute UserSearchForm form,
+	public String pagingUsers(@ModelAttribute ManagementForm form,
 			@AuthenticationPrincipal UsersDetails user,
 			Model model,
 			HttpServletRequest request) {
@@ -191,7 +192,7 @@ public class ManagementController {
 		users.setAccountName(form.getAccountName());
 		users.setUserName(form.getUserName());
 		if (form.isStatus()) {
-			users.setStatus("INVALID");
+			users.setStatus("2");
 		}
 
 		//検索条件は保持

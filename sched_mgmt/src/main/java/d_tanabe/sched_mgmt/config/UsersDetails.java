@@ -38,7 +38,7 @@ public class UsersDetails implements UserDetails {
 		String role = this.user.getRole();
 
 		//無効ユーザーの場合は権限が無効になるように設定
-		if ("INVALID".equals(this.user.getStatus())) {
+		if ("2".equals(this.user.getStatus())) {
 			role = this.user.getStatus();
 		}
 

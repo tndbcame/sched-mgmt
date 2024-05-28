@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.sample.repository.UsersMapper">
+<mapper namespace="d_tanabe.sched_mgmt.repository.UsersMapper">
 	<!-- マッピング -->
-	<resultMap type="com.example.sample.model.Users"
+	<resultMap type="d_tanabe.sched_mgmt.model.Users"
 		id="loginUser">
 		<id column="id" property="id" />
 		<result column="account_name" property="accountName" />
@@ -17,7 +17,7 @@
 		select *,
 		count(*) over() as total_users
 		from users
-		where status in ('VALID'
+		where status in ('1'
 		<if test="status != null">
 			,#{status}
 		</if>

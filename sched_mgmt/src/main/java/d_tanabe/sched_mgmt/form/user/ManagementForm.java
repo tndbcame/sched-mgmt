@@ -1,4 +1,4 @@
-package d_tanabe.sched_mgmt.form;
+package d_tanabe.sched_mgmt.form.user;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import lombok.Data;
  * ユーザー検索画面からの入力をバインド
  */
 @Data
-public class UserSearchForm {
+public class ManagementForm {
 	private Integer userId;
 	private String accountName;
 	private String userName;

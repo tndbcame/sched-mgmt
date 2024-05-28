@@ -1,4 +1,4 @@
-package d_tanabe.sched_mgmt.controller;
+package d_tanabe.sched_mgmt.controller.user.schedule;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import d_tanabe.sched_mgmt.config.UsersDetails;
-import d_tanabe.sched_mgmt.form.ScheduleForm;
+import d_tanabe.sched_mgmt.form.user.ScheduleForm;
 import d_tanabe.sched_mgmt.model.Schedule;
 import d_tanabe.sched_mgmt.model.Users;
 import d_tanabe.sched_mgmt.service.ScheduleService;

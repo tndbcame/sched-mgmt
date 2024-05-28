@@ -1,4 +1,4 @@
-package d_tanabe.sched_mgmt.controller;
+package d_tanabe.sched_mgmt.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import d_tanabe.sched_mgmt.form.SignUpForm;
+import d_tanabe.sched_mgmt.form.user.SignupForm;
 import d_tanabe.sched_mgmt.model.Users;
 import d_tanabe.sched_mgmt.service.UsersService;
 import d_tanabe.sched_mgmt.validation.CommonValidation;
@@ -21,7 +20,7 @@ import jakarta.servlet.http.HttpSession;
  * ユーザー登録コントローラー
  */
 @Controller
-public class SignUpController {
+public class SignupController {
 
 	//セッション
 	@Autowired
@@ -43,7 +42,7 @@ public class SignUpController {
 	 * またはredirect:/login
 	 */
 	@GetMapping("/signup")
-	public String getSignup(@ModelAttribute SignUpForm form,
+	public String getSignup(@ModelAttribute SignupForm form,
 			Model model,
 			HttpServletRequest request) {
 
@@ -71,7 +70,7 @@ public class SignUpController {
 	 * またはgetSignup(ユーザー登録画面のgetメソッド)
 	 */
 	@PostMapping("/signup")
-	public String postSignup(@Validated @ModelAttribute SignUpForm form,
+	public String postSignup(@Validated @ModelAttribute SignupForm form,
 			BindingResult bindingResult,
 			Model model,
 			RedirectAttributes redirectAttributes,

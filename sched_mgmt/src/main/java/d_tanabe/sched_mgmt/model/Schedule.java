@@ -10,7 +10,6 @@ import lombok.Data;
 public class Schedule {
 	private Integer id;
 	private Integer userId;
-	private String accountName;
 	private Date date;
 	private String schedule;
 }

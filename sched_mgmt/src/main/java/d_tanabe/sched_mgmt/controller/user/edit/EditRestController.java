@@ -1,4 +1,4 @@
-package d_tanabe.sched_mgmt.controller;
+package d_tanabe.sched_mgmt.controller.user.edit;
 
 import java.util.Locale;
 
@@ -7,8 +7,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import d_tanabe.sched_mgmt.form.UserDetailForm;
+import d_tanabe.sched_mgmt.form.user.edit.EditForm;
 import d_tanabe.sched_mgmt.model.Users;
 import d_tanabe.sched_mgmt.service.UsersService;
 
@@ -17,7 +16,7 @@ import d_tanabe.sched_mgmt.service.UsersService;
  * Restユーザー詳細画面コントローラー(非同期通信用の処理)
  */
 @RestController
-public class UsersDetailRestController {
+public class EditRestController {
 
 	//サービスクラス
 	@Autowired
@@ -33,7 +32,7 @@ public class UsersDetailRestController {
 	 * @return UserDetailForm ユーザー情報をセットして返却
 	 */
 	@PostMapping("/alertUserDetailForDelete")
-	public UserDetailForm alertUserDetailForDelete(@RequestBody UserDetailForm form) {
+	public EditForm alertUserDetailForDelete(@RequestBody EditForm form) {
 
 		try {
 			//ユーザー情報を取得

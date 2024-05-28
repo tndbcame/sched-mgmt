@@ -118,8 +118,7 @@ body {
     vertical-align: baseline;
     cursor: pointer;
     transition: all 200ms;
-
-            user-select: none;
+    user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
 }

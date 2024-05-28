@@ -1,4 +1,4 @@
-package d_tanabe.sched_mgmt.form;
+package d_tanabe.sched_mgmt.form.user.edit;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -10,7 +10,7 @@ import lombok.Data;
  * パスワード変更画面からの入力をバインド
  */
 @Data
-public class EditPasswordForm {
+public class PasswordForm {
 
 	private Integer userId;
 	@NotBlank

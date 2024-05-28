@@ -1,4 +1,4 @@
-package d_tanabe.sched_mgmt.form;
+package d_tanabe.sched_mgmt.form.user;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

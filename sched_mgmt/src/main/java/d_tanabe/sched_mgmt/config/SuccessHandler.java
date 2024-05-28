@@ -30,11 +30,11 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
 		List<GrantedAuthority> authenticationList = new ArrayList<>(authentication.getAuthorities());
 
 		//権限がADMINかチェック
-		if ("ADMIN".equals(authenticationList.get(0).getAuthority())) {
+		if ("1".equals(authenticationList.get(0).getAuthority())) {
 			response.sendRedirect(request.getContextPath() + "/management");
 
 			//権限が無効の場合
-		} else if ("INVALID".equals(authenticationList.get(0).getAuthority())) {
+		} else if ("2".equals(authenticationList.get(0).getAuthority())) {
 			response.sendRedirect(request.getContextPath() + "/login");
 
 		} else {

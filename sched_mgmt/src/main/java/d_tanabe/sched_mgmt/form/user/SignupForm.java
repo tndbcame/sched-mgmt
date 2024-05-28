@@ -1,4 +1,4 @@
-package d_tanabe.sched_mgmt.form;
+package d_tanabe.sched_mgmt.form.user;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -10,7 +10,7 @@ import lombok.Data;
  * ユーザー登録画面からの入力をバインド
  */
 @Data
-public class SignUpForm {
+public class SignupForm {
 	@NotBlank //文字列がnull,空文字,空白スペースでないかチェック
 	@Pattern(regexp = "^[a-zA-Z0-9]+$") //半角英数字かチェック
 	@Length(min = 0, max = 10) //規定の文字数かチェック

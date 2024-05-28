@@ -1,4 +1,4 @@
-package d_tanabe.sched_mgmt.controller;
+package d_tanabe.sched_mgmt.controller.user.schedule;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -11,8 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import d_tanabe.sched_mgmt.form.ScheduleForm;
+import d_tanabe.sched_mgmt.form.user.ScheduleForm;
 import d_tanabe.sched_mgmt.model.Schedule;
 import d_tanabe.sched_mgmt.service.ScheduleService;
 import d_tanabe.sched_mgmt.validation.CommonValidation;
@@ -81,7 +80,6 @@ public class ScheduleRestController {
 		//スケージュールをセット
 		schedule.setId(form.getUserId());
 		schedule.setUserId(form.getUserId());
-		schedule.setAccountName(form.getAccountName());
 		schedule.setSchedule(form.getSchedule());
 
 		//スケージュールを登録

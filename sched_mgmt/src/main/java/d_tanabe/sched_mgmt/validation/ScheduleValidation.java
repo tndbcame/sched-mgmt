@@ -19,12 +19,13 @@ public class ScheduleValidation {
 	@Autowired
 	ScheduleService scheduleService;
 
-	//メッセージ
+	// メッセージ
 	@Autowired
 	MessageSource messagesource;
 
 	/**
 	 * 日付入力チェックしてエラーメッセージを返却
+	 * 
 	 * @param year
 	 * @param month
 	 * @param day
@@ -34,17 +35,16 @@ public class ScheduleValidation {
 		String msg = "";
 
 		try {
-			//日付を数値型へ変換
+			// 日付を数値型へ変換
 			int day_ = Integer.parseInt(day);
 			Integer lastDay = scheduleService.getLastDayOfTheMonth(year, month);
 			if (lastDay < day_) {
-				//日付のメッセージを取得する
-				msg = messagesource.getMessage("001.validation.maxRangeOfDays", new String[] { lastDay.toString() },
-						Locale.JAPAN);
+				// 日付のメッセージを取得する
+				msg = messagesource.getMessage("001.validation.maxRangeOfDays",
+						new String[] {lastDay.toString()}, Locale.JAPAN);
 			}
 		} catch (Exception e) {
-			msg =  messagesource.getMessage("005.validation.invalidStr",null,
-					Locale.JAPAN);
+			msg = messagesource.getMessage("005.validation.invalidStr", null, Locale.JAPAN);
 		}
 
 		return msg;
