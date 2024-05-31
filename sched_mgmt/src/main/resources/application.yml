@@ -6,6 +6,8 @@ spring:
         url: jdbc:postgresql://localhost:5432/sched_mgmt
         username: postgres
         password: postgresql
+    messages:
+        basename: prop/messages,prop/ValidationMessages
 mybatis:
     configuration:
         map-underscore-to-camel-case: true

@@ -29,52 +29,50 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class EditController {
 
-	//セッション
+	// セッション
 	@Autowired
 	private HttpSession session;
 
-	//サービスクラス
+	// サービスクラス
 	@Autowired
 	private UsersService usersService;
 
-	//共通バリデーション
+	// 共通バリデーション
 	@Autowired
 	private CommonValidation commonValidation;
 
-	//パスワード画面のバリデーション
+	// パスワード画面のバリデーション
 	@Autowired
 	private PasswordValidation passwordValidation;
 
-	//メッセージ
+	// メッセージ
 	@Autowired
 	MessageSource messagesource;
 
 	/**
 	 * ユーザー詳細画面へ遷移する
+	 * 
 	 * @param form (詳細画面からの入力をバインド)
 	 * @param model
 	 * @param request
-	 * @return user/detail
+	 * @return /user/edit/edit
 	 */
-	@GetMapping("/userDetail")
-	public String getUsersDetail(@ModelAttribute EditForm form,
-			Model model,
+	@GetMapping("/user/edit")
+	public String getUsersDetail(@ModelAttribute EditForm form, Model model,
 			HttpServletRequest request) {
 
-		//セッションを取得する
+		// セッションを取得する
 		session = request.getSession();
 
 		model.addAttribute("loginUser",
 				commonValidation.escapeStr(session.getAttribute("loginUser").toString()));
 
-		//ユーザーIDからユーザー情報を検索する
+		// ユーザーIDからユーザー情報を検索する
 		Users users = usersService.findByUserId(form.getUserId());
-
+		System.out.println(users.getId() + "aaaaasssssssssssssssss");
 		model.addAttribute("userId", users.getId());
-		model.addAttribute("accountName",
-				commonValidation.escapeStr(users.getAccountName()));
-		model.addAttribute("userName",
-				commonValidation.escapeStr(users.getUserName()));
+		model.addAttribute("accountName", commonValidation.escapeStr(users.getAccountName()));
+		model.addAttribute("userName", commonValidation.escapeStr(users.getUserName()));
 		if ("1".equals(users.getRole())) {
 			model.addAttribute("admin", true);
 		}
@@ -82,207 +80,195 @@ public class EditController {
 			model.addAttribute("status", true);
 		}
 
-		return "user/detail";
+		return "/user/edit/edit";
 	}
 
 	/**
 	 * ユーザー情報を更新する
+	 * 
 	 * @param user (ログイン情報を保持しているクラス)
 	 * @param form (詳細画面からの入力をバインド)
 	 * @param bindingResult
 	 * @param model
 	 * @param redirectAttributes
 	 * @param request
-	 * @return getUsersDetail(詳細画面のゲットメソッド)
-	 * またはredirect:/logout
-	 * またはredirect:/complete
+	 * @return getUsersDetail(詳細画面のゲットメソッド) またはredirect:/logout またはredirect:/user/edit/complete
 	 */
-	@PostMapping("/updateUser")
+	@PostMapping("/user/edit/update")
 	public String postUpdateUser(@AuthenticationPrincipal UsersDetails user,
-			@Validated @ModelAttribute EditForm form,
-			BindingResult bindingResult,
-			Model model,
-			RedirectAttributes redirectAttributes,
-			HttpServletRequest request) {
+			@Validated @ModelAttribute EditForm form, BindingResult bindingResult, Model model,
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
-		//バリデーション
+		// バリデーション
 		if (bindingResult.hasErrors()) {
 			return getUsersDetail(form, model, request);
 		}
 
 		Users users = new Users();
-		//入力値を格納
+		// 入力値を格納
 		users.setId(form.getUserId());
 		users.setAccountName(form.getAccountName());
 		users.setUserName(form.getUserName());
 
-		//ユーザー情報を更新する
+		// ユーザー情報を更新する
 		usersService.upDateUser(users, form.isAdmin(), form.isStatus());
 
-		//メッセージをセットする
-		redirectAttributes.addFlashAttribute("message",
-				usersService.getCompleteMessage("2"));
+		// メッセージをセットする
+		redirectAttributes.addFlashAttribute("message", usersService.getCompleteMessage("2"));
 
-		//更新者が自分の情報を更新したときはログアウト
+		// 更新者が自分の情報を更新したときはログアウト
 		if (form.getUserId() == user.getUserId()) {
 			if (!form.isAdmin() || form.isStatus()) {
 				return "redirect:/logout";
 			}
 		}
-		//完了画面へ遷移
-		return "redirect:/complete";
+		// 完了画面へ遷移
+		return "redirect:/user/edit/complete";
 	}
 
 	/**
 	 * ユーザーを削除する
+	 * 
 	 * @param user (ログイン情報を保持しているクラス)
 	 * @param form (詳細画面からの入力をバインド)
 	 * @param bindingResult
 	 * @param model
 	 * @param redirectAttributes
 	 * @param request
-	 * @return getUsersDetail(詳細画面のゲットメソッド)
-	 * またはredirect:/logout
-	 * またはredirect:/complete
+	 * @return getUsersDetail(詳細画面のゲットメソッド) またはredirect:/logout またはredirect:/user/edit/complete
 	 */
-	@PostMapping("/deleteUser")
+	@PostMapping("/user/edit/delete")
 	public String postDeleteUser(@AuthenticationPrincipal UsersDetails user,
-			@Validated @ModelAttribute EditForm form,
-			BindingResult bindingResult,
-			Model model,
-			RedirectAttributes redirectAttributes,
-			HttpServletRequest request) {
+			@Validated @ModelAttribute EditForm form, BindingResult bindingResult, Model model,
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
-		//バリデーション
+		// バリデーション
 		if (bindingResult.hasErrors()) {
 			return getUsersDetail(form, model, request);
 		}
 
-		//ユーザーを削除
+		// ユーザーを削除
 		usersService.deleteUser(form.getUserId());
 
-		//メッセージをセットする
-		redirectAttributes.addFlashAttribute("message",
-				usersService.getCompleteMessage("3"));
+		// メッセージをセットする
+		redirectAttributes.addFlashAttribute("message", usersService.getCompleteMessage("3"));
 
-		//更新社が自分の情報を削除したときはログアウト
+		// 更新社が自分の情報を削除したときはログアウト
 		if (form.getUserId() == user.getUserId()) {
 			if (!form.isAdmin() || form.isStatus()) {
 				return "redirect:/logout";
 			}
 		}
-		//完了画面へ遷移
-		return "redirect:/complete";
+		// 完了画面へ遷移
+		return "redirect:/user/edit/complete";
 	}
 
-		/**
+	/**
 	 * パスワード変更画面へ遷移する
+	 * 
 	 * @param form (パスワード変更画面からの入力をバインド)
 	 * @param model
 	 * @param request
-	 * @return user/password
+	 * @return user/edit/password
 	 */
-	@GetMapping("/editPassword")
-	public String getEditPassword(@ModelAttribute PasswordForm form,
-			Model model,
+	@GetMapping("/user/edit/password")
+	public String getEditPassword(@ModelAttribute PasswordForm form, Model model,
 			HttpServletRequest request) {
 
-		//セッションを取得する
+		// セッションを取得する
 		session = request.getSession();
 		model.addAttribute("loginUser",
 				commonValidation.escapeStr(session.getAttribute("loginUser").toString()));
 
-		//ユーザーIdをセット
+		// ユーザーIdをセット
 		model.addAttribute("userId", form.getUserId());
 
-		return "user/password";
+		return "user/edit/password";
 
 	}
 
 	/**
 	 * パスワードを変更する
+	 * 
 	 * @param form (パスワード変更画面からの入力をバインド)
 	 * @param bindingResult
 	 * @param model
 	 * @param redirectAttributes
 	 * @param request
-	 * @return redirect:/complete
-	 * または getPassword(パスワード変更画面のgetメソッド)
+	 * @return redirect:/user/edit/complete または getPassword(パスワード変更画面のgetメソッド)
 	 */
-	@PostMapping("/updatePassword")
+	@PostMapping("/user/edit/password/update")
 	public String postEditUpdatePassword(@Validated @ModelAttribute PasswordForm form,
-			BindingResult bindingResult,
-			Model model,
-			RedirectAttributes redirectAttributes,
+			BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
 
-		//バリデーションチェック
+		// バリデーションチェック
 		if (bindingResult.hasErrors()) {
 			return getEditPassword(form, model, request);
 		}
 
 		String errorMsg = "";
 
-		//ユーザーの存在チェック
-		//存在しない場合はエラー
+		// ユーザーの存在チェック
+		// 存在しない場合はエラー
 		if (usersService.existsUser(form.getUserId(), form.getCurrentPassword())) {
 
-			//新しいパスワードとその確認用のパスワードが同一ものかチェックしてメッセージを取得
-			errorMsg = passwordValidation.getPasswordErrorMsg(form.getNewPassword(), form.getNewPassword2());
+			// 新しいパスワードとその確認用のパスワードが同一ものかチェックしてメッセージを取得
+			errorMsg = passwordValidation.getPasswordErrorMsg(form.getNewPassword(),
+					form.getNewPassword2());
 			if ("".equals(errorMsg)) {
 
-				//パスワード更新
+				// パスワード更新
 				usersService.upDatePassword(form.getUserId(), form.getNewPassword());
 
-				//メッセージをセット
+				// メッセージをセット
 				redirectAttributes.addFlashAttribute("message",
 						usersService.getCompleteMessage("4"));
 
-				//完了画面へ遷移
-				return "redirect:/complete";
+				// 完了画面へ遷移
+				return "redirect:/user/edit/complete";
 
 			} else {
 
-				//エラーメッセージがある場合はgetへ
+				// エラーメッセージがある場合はgetへ
 				model.addAttribute("failMsg2", errorMsg);
 				return getEditPassword(form, model, request);
 			}
 
 		} else {
 
-			//エラーメッセージを格納してgetへ
-			errorMsg = messagesource.getMessage(
-					"002.validation.notUser", null, Locale.JAPAN);
+			// エラーメッセージを格納してgetへ
+			errorMsg = messagesource.getMessage("002.validation.notUser", null, Locale.JAPAN);
 			model.addAttribute("failMsg", errorMsg);
 			return getEditPassword(form, model, request);
 		}
 	}
 
-		/**
+	/**
 	 * 完了画面へ遷移する
+	 * 
 	 * @param model
 	 * @param request
-	 * @return user/complete
+	 * @return user/user/edit/complete
 	 */
-	@GetMapping("/complete")
-	public String getSignup(Model model,
-			HttpServletRequest request) {
+	@GetMapping("/user/edit/complete")
+	public String getSignup(Model model, HttpServletRequest request) {
 
 		// Flash Scopeから値の取り出してmodelにセット
 		String message = (String) model.getAttribute("message");
 
-		//messageがない場合はリダイレクト
+		// messageがない場合はリダイレクト
 		if (message == null) {
-			return "redirect:/management";
+			return "redirect:/user/management";
 		}
 
-		//セッションを取得する
+		// セッションを取得する
 		session = request.getSession();
 
 		model.addAttribute("loginUser",
 				commonValidation.escapeStr(session.getAttribute("loginUser").toString()));
 
-		return "user/complete";
+		return "user/edit/complete";
 
 	}
 }

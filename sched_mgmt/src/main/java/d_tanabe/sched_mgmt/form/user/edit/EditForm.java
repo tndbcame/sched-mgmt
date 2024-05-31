@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 /**
- * ユーザー詳細画面からの入力をバインド
+ * ユーザー編集画面からの入力をバインド
  */
 @Data
 public class EditForm {

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<link rel="stylesheet" th:href="@{/css/user/detail.css}">
-	<link rel="stylesheet" th:href="@{/css/common/header.css}">
+	<link rel="stylesheet" th:href="@{/css/user/edit/edit.css}">
+	<link rel="stylesheet" th:href="@{/css/header.css}">
 	<script th:src="@{/js/plugin/jquery-3.7.1.min.js}"></script>
 	<meta charset="UTF-8">
 	<meta th:name="_csrf" th:content="${_csrf.token}">
@@ -12,14 +12,14 @@
 
 <body>
 	<header class="header_bg">
-		<nav layout:replace="~{common/header::header}"></nav>
+		<nav layout:replace="~{header::header}"></nav>
 	</header>
 	<div class="wrap">
-		<a th:href="@{'/management'}">管理画面へ戻る</a>
-		<a class="password-link" th:href="@{/editPassword(userId=${userDetailForm.userId})}">パスワードの変更はこちら</a>
+		<a th:href="@{'/user/management'}">管理画面へ戻る</a>
+		<a class="password-link" th:href="@{/user/edit/password(userId=${editForm.userId})}">パスワードの変更はこちら</a>
 		<div class="insert-bg">
-			<h1>ユーザー詳細</h1>
-			<form th:action="@{/}" name="form" method="post" th:object="${userDetailForm}">
+			<h1>ユーザー編集</h1>
+			<form th:action="@{/}" name="form" method="post" th:object="${editForm}">
 				<div class="input-form">
 					<div id="errorMsg" class="errorMsg"></div>
 					<div>
@@ -52,12 +52,12 @@
 				<div class="button-form">
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					<button type="button" id="deleteBtn" class="deleteBtn">削除</button>
-					<button type="submit" th:formaction="@{'/updateUser'}">更新</button>
+					<button type="submit" th:formaction="@{'/user/edit/update'}">更新</button>
 				</div>
 			</form>
 		</div>
 	</div>
-	<script th:src="@{/js/detail.js}"></script>
+	<script th:src="@{/js/user/edit.js}"></script>
 </body>
 
 </html>

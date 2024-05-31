@@ -68,7 +68,7 @@ $(function() {
 		};
 		$.ajax({
 			type: 'post',
-			url: '/insertSchedule',
+			url: '/user/schedule/register',
 			data: JSON.stringify(request),
 			contentType: 'application/json',
 			dataType: "json",
@@ -116,7 +116,7 @@ $(function() {
 		};
 		$.ajax({
 			type: 'post',
-			url: '/displaySchedule',
+			url: '/user/schedule/disp',
 			data: JSON.stringify(request),
 			contentType: 'application/json',
 			dataType: "json",

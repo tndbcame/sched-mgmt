@@ -43,7 +43,7 @@ public class ScheduleRestController {
 	 * @param bindingResult
 	 * @return form
 	 */
-	@PostMapping("/insertSchedule")
+	@PostMapping("/user/schedule/register")
 	public ScheduleForm insertSchedule(@Validated @RequestBody ScheduleForm form,
 			BindingResult bindingResult) {
 
@@ -96,7 +96,7 @@ public class ScheduleRestController {
 	 * @param form (スケジュール画面からの入力をバインド)
 	 * @return scheduleMap(key:Days value:schedule)
 	 */
-	@PostMapping("/displaySchedule")
+	@PostMapping("/user/schedule/disp")
 	public HashMap<Integer, String> diplaySchedule(@RequestBody ScheduleForm form) {
 
 		Schedule schedule = new Schedule();

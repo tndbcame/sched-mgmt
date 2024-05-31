@@ -31,8 +31,8 @@ public class EditRestController {
 	 * @param form (詳細画面からの入力をバインド)
 	 * @return UserDetailForm ユーザー情報をセットして返却
 	 */
-	@PostMapping("/alertUserDetailForDelete")
-	public EditForm alertUserDetailForDelete(@RequestBody EditForm form) {
+	@PostMapping("/user/edit/delete/alert")
+	public EditForm deleteAlert(@RequestBody EditForm form) {
 
 		try {
 			//ユーザー情報を取得

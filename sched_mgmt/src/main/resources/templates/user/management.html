@@ -2,38 +2,38 @@
 <html  xmlns:th="http://www.thymeleaf.org">
 <head>
 	<link rel="stylesheet" th:href="@{/css/user/management.css}">
-	<link rel="stylesheet" th:href="@{/css/common/header.css}">
+	<link rel="stylesheet" th:href="@{/css/header.css}">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>管理画面</title>
 </head>
 <body>
 	<header class="header_bg">
-		<nav layout:replace="~{common/header::header}"></nav>
+		<nav layout:replace="~{header::header}"></nav>
 	</header>
 	<div class="wrap">
 		<div class="title">
 			<h1>管理画面</h1>
-			<a th:href="@{'/schedule'}" class="a1">スケジュール画面</a>
-			<a th:href="@{'/signup'}" class="a2">ユーザー新規追加</a>
+			<a th:href="@{'/user/schedule'}" class="a1">スケジュール画面</a>
+			<a th:href="@{'/user/signup'}" class="a2">ユーザー新規追加</a>
 		</div>
 		<div class="inputArea">
-			<label class="label_1">ユーザ一覧</label>
-			<form action="#" th:action="@{/userSearch}" method="get" th:object="${userSearchForm}">
+			<label class="label_1">ユーザー検索</label>
+			<form action="#" th:action="@{/user/management/search}" method="get" th:object="${managementForm}">
 				<div>
 					<label class="label_2">ID</label>
-					<input type="number" name="userId" placeholder="例）1" th:value="${userIdSearchCondition}">
+					<input type="number" name="userId" placeholder="例）1" th:value="${enteredUserId}">
 				</div>
 				<div>
 					<label>アカウント名</label>
-					<input type="text" name="accountName" placeholder="例）accout_tarou" th:value="${accountNameSearchCondition}">
+					<input type="text" name="accountName" placeholder="例）accout_tarou" th:value="${enteredAccountName}">
 				</div>
 				<div>
 					<label class="label_2">氏名</label>
-					<input type="text" name="userName" placeholder="例）太郎" th:value="${userNameSearchCondition}">
+					<input type="text" name="userName" placeholder="例）太郎" th:value="${enteredUserName}">
 				</div>
 				<div class="invalid-label">
 					<label>無効を含める</label>
-					<input type="checkbox" name="status" class="checkbox_color" th:checked="${statusSearchCondition}">
+					<input type="checkbox" name="status" class="checkbox_color" th:checked="${enteredStatus}">
 				</div>
 				<button type="submit">検索</button>
 			</form>
@@ -56,13 +56,13 @@
 						<td th:text="${user.accountName}"></td>
 						<td>
 							<a th:text="${user.userName}" 
-								th:href="@{/schedule(__(${user.id!=null?'userId=${user.id}':','})__)}">
+								th:href="@{/user/schedule(__(${user.id!=null?'userId=${user.id}':','})__)}">
 							</a>
 						</td>
 						<td th:text="${user.role}"></td>
 						<td th:text="${user.status}"></td>
-						<td><a th:href="@{/userDetail(userId=${user.id})}">
-								詳細
+						<td><a th:href="@{/user/edit(userId=${user.id})}">
+								編集
 							</a>
 						</td>
 					</tr>
@@ -70,41 +70,41 @@
 			</table>
 		</div>
 		<div class="paging">
-			<a th:href="@{/pagingUsers(__(${userIdSearchCondition!=null?'userId=${userIdSearchCondition}':','})__,
-					__(${accountNameSearchCondition!=null?'accountName=${accountNameSearchCondition}':','})__,
-					__(${userNameSearchCondition!=null?'userName=${userNameSearchCondition}':','})__,
-					__(${statusSearchCondition!=null?'status=${statusSearchCondition}':','})__,
+			<a th:href="@{/user/management/page(__(${enteredUserId!=null?'userId=${enteredUserId}':','})__,
+					__(${enteredAccountName!=null?'accountName=${enteredAccountName}':','})__,
+					__(${enteredUserName!=null?'userName=${enteredUserName}':','})__,
+					__(${enteredStatus!=null?'status=${enteredStatus}':','})__,
 					__(${1!=null?'currentPage=1':','})__)}">
 					<< 
 			
 			</a>
-			<a th:href="@{/pagingUsers(__(${userIdSearchCondition!=null?'userId=${userIdSearchCondition}':','})__,
-					__(${accountNameSearchCondition!=null?'accountName=${accountNameSearchCondition}':','})__,
-					__(${userNameSearchCondition!=null?'userName=${userNameSearchCondition}':','})__,
-					__(${statusSearchCondition!=null?'status=${statusSearchCondition}':','})__,
+			<a th:href="@{/user/management/page(__(${enteredUserId!=null?'userId=${enteredUserId}':','})__,
+					__(${enteredAccountName!=null?'accountName=${enteredAccountName}':','})__,
+					__(${enteredUserName!=null?'userName=${enteredUserName}':','})__,
+					__(${enteredStatus!=null?'status=${enteredStatus}':','})__,
 					__(${prevPage!=null?'currentPage=${prevPage}':','})__)}"> 
 					< 
 			</a>
 			<th:block th:each="i : ${#numbers.sequence(1,totalPage,1)}">
 				<a th:text="${i}"
-					th:href="@{/pagingUsers(__(${userIdSearchCondition!=null?'userId=${userIdSearchCondition}':','})__,
-					__(${accountNameSearchCondition!=null?'accountName=${accountNameSearchCondition}':','})__,
-					__(${userNameSearchCondition!=null?'userName=${userNameSearchCondition}':','})__,
-					__(${statusSearchCondition!=null?'status=${statusSearchCondition}':','})__,
+					th:href="@{/user/management/page(__(${enteredUserId!=null?'userId=${enteredUserId}':','})__,
+					__(${enteredAccountName!=null?'accountName=${enteredAccountName}':','})__,
+					__(${enteredUserName!=null?'userName=${enteredUserName}':','})__,
+					__(${enteredStatus!=null?'status=${enteredStatus}':','})__,
 					__(${i!=null?'currentPage=${i}':','})__)}">
 				</a>
 			</th:block>
-			<a th:href="@{/pagingUsers(__(${userIdSearchCondition!=null?'userId=${userIdSearchCondition}':','})__,
-					__(${accountNameSearchCondition!=null?'accountName=${accountNameSearchCondition}':','})__,
-					__(${userNameSearchCondition!=null?'userName=${userNameSearchCondition}':','})__,
-					__(${statusSearchCondition!=null?'status=${statusSearchCondition}':','})__,
+			<a th:href="@{/user/management/page(__(${enteredUserId!=null?'userId=${enteredUserId}':','})__,
+					__(${enteredAccountName!=null?'accountName=${enteredAccountName}':','})__,
+					__(${enteredUserName!=null?'userName=${enteredUserName}':','})__,
+					__(${enteredStatus!=null?'status=${enteredStatus}':','})__,
 					__(${nextPage!=null?'currentPage=${nextPage}':','})__)}">
 					> 
 				</a>
-			<a th:href="@{/pagingUsers(__(${userIdSearchCondition!=null?'userId=${userIdSearchCondition}':','})__,
-					__(${accountNameSearchCondition!=null?'accountName=${accountNameSearchCondition}':','})__,
-					__(${userNameSearchCondition!=null?'userName=${userNameSearchCondition}':','})__,
-					__(${statusSearchCondition!=null?'status=${statusSearchCondition}':','})__,
+			<a th:href="@{/user/management/page(__(${enteredUserId!=null?'userId=${enteredUserId}':','})__,
+					__(${enteredAccountName!=null?'accountName=${enteredAccountName}':','})__,
+					__(${enteredUserName!=null?'userName=${enteredUserName}':','})__,
+					__(${enteredStatus!=null?'status=${enteredStatus}':','})__,
 					__(${totalPage!=null?'currentPage=${totalPage}':','})__)}">
 					>>
 			</a>

@@ -49,7 +49,7 @@ public class ManagementController {
 	 * @param request
 	 * @return user/management
 	 */
-	@GetMapping("/management")
+	@GetMapping("/user/management")
 	public String getManagement(@ModelAttribute ManagementForm form,
 			@AuthenticationPrincipal UsersDetails user,
 			Model model,
@@ -78,10 +78,10 @@ public class ManagementController {
 		users.setStatus("2");
 
 		//検索条件(初期値)を設定する
-		model.addAttribute("userIdSearchCondition", form.getUserId());
-		model.addAttribute("userNameSearchCondition", "");
-		model.addAttribute("accountNameSearchCondition", "");
-		model.addAttribute("statusSearchCondition", true);
+		model.addAttribute("enteredUserId", form.getUserId());
+		model.addAttribute("enteredUserName", "");
+		model.addAttribute("enteredAccountName", "");
+		model.addAttribute("enteredStatus", true);
 		model.addAttribute("currentPage", 1);
 
 		//ユーザーを全件取得してセット
@@ -114,7 +114,7 @@ public class ManagementController {
 	 * @param request
 	 * @return user/management
 	 */
-	@GetMapping("/userSearch")
+	@GetMapping("/user/management/search")
 	public String searchUsers(@ModelAttribute ManagementForm form,
 			@AuthenticationPrincipal UsersDetails user,
 			Model model,
@@ -134,11 +134,11 @@ public class ManagementController {
 			users.setStatus("2");
 		}
 
-		//検索条件は保持
-		model.addAttribute("userIdSearchCondition", form.getUserId());
-		model.addAttribute("userNameSearchCondition", form.getUserName());
-		model.addAttribute("accountNameSearchCondition", form.getAccountName());
-		model.addAttribute("statusSearchCondition", form.isStatus());
+		//検索項目は保持
+		model.addAttribute("enteredUserId", form.getUserId());
+		model.addAttribute("enteredUserName", form.getUserName());
+		model.addAttribute("enteredAccountName", form.getAccountName());
+		model.addAttribute("enteredStatus", form.isStatus());
 		model.addAttribute("currentPage", 1);
 
 		//ユーザーを全件取得してセット
@@ -175,7 +175,7 @@ public class ManagementController {
 	 * @param request
 	 * @return user/management
 	 */
-	@GetMapping("/pagingUsers")
+	@GetMapping("/user/management/page")
 	public String pagingUsers(@ModelAttribute ManagementForm form,
 			@AuthenticationPrincipal UsersDetails user,
 			Model model,
@@ -195,11 +195,11 @@ public class ManagementController {
 			users.setStatus("2");
 		}
 
-		//検索条件は保持
-		model.addAttribute("userIdSearchCondition", form.getUserId());
-		model.addAttribute("userNameSearchCondition", form.getUserName());
-		model.addAttribute("accountNameSearchCondition", form.getAccountName());
-		model.addAttribute("statusSearchCondition", form.isStatus());
+		//検索項目は保持
+		model.addAttribute("enteredUserId", form.getUserId());
+		model.addAttribute("enteredUserName", form.getUserName());
+		model.addAttribute("enteredAccountName", form.getAccountName());
+		model.addAttribute("enteredStatus", form.isStatus());
 
 		//今いるページ
 		startIndex = (form.getCurrentPage() - 1) * perPage;

@@ -43,9 +43,9 @@ public class ScheduleController {
 	 * @param form (スケジュール画面からの入力をバインド)
 	 * @param model
 	 * @param request
-	 * @return schedule/schedule
+	 * @return schedule/user/schedule
 	 */
-	@GetMapping("/schedule")
+	@GetMapping("/user/schedule")
 	public String getSignup(@AuthenticationPrincipal UsersDetails user,
 			@ModelAttribute ScheduleForm form,
 			Model model,
@@ -96,6 +96,6 @@ public class ScheduleController {
 		//スケジュールをリストとして設定
 		model.addAttribute("scheduleMap", scheduleService.selectSchedule(schedule, "2023", "1"));
 
-		return "schedule/schedule";
+		return "user/schedule";
 	}
 }

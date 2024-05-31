@@ -43,9 +43,9 @@ public class SecurityConfig {
 
 		//認可の設定
 		http.authorizeHttpRequests(authz -> authz
-				.requestMatchers("/management", "/signup", "/userDetail")
+				.requestMatchers("/user/management", "/user/signup", "/user/edit")
 				.hasAuthority("1")//ADMINのみが入れるページ
-				.requestMatchers("/schedule")
+				.requestMatchers("/user/schedule")
 				.hasAnyAuthority("2", "1")//USERも入れるページ
 				.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
 				.permitAll()//一般的な静的ファイルパス（"/css/**"など）に対し、非ログインでのアクセスを許可

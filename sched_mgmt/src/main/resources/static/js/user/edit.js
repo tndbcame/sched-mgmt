@@ -1,5 +1,5 @@
 /**********************************************
- * ユーザー詳細情報を非同期通信でリクエスト送信
+ * ユーザー編集情報を非同期通信でリクエスト送信
  **********************************************/
 
 // メタタグに埋め込んだ情報を取得する
@@ -24,7 +24,7 @@ $(function() {
 		};
 		$.ajax({
 			type: 'post',
-			url: '/alertUserDetailForDelete',
+			url: '/user/edit/delete/alert',
 			data: JSON.stringify(request),
 			contentType: 'application/json',
 			dataType: "json",
@@ -42,7 +42,7 @@ $(function() {
 						+ data['userName']
 						+ "\n"
 						+ "こちらを削除してもよろしいでしょうか？")) {
-						document.form.action = "/deleteUser";
+						document.form.action = "/user/edit/delete";
 						document.form.submit();
 					} else {
 						alert("キャンセルされました");

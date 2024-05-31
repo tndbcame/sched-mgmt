@@ -31,14 +31,14 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
 
 		//権限がADMINかチェック
 		if ("1".equals(authenticationList.get(0).getAuthority())) {
-			response.sendRedirect(request.getContextPath() + "/management");
+			response.sendRedirect(request.getContextPath() + "/user/management");
 
 			//権限が無効の場合
 		} else if ("2".equals(authenticationList.get(0).getAuthority())) {
 			response.sendRedirect(request.getContextPath() + "/login");
 
 		} else {
-			response.sendRedirect(request.getContextPath() + "/schedule");
+			response.sendRedirect(request.getContextPath() + "/user/schedule");
 		}
 	}
 

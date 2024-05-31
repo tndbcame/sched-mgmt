@@ -41,7 +41,7 @@ public class SignupController {
 	 * @return user/signup
 	 * またはredirect:/login
 	 */
-	@GetMapping("/signup")
+	@GetMapping("/user/signup")
 	public String getSignup(@ModelAttribute SignupForm form,
 			Model model,
 			HttpServletRequest request) {
@@ -66,10 +66,10 @@ public class SignupController {
 	 * @param model
 	 * @param redirectAttributes
 	 * @param request
-	 * @return redirect:/complete
+	 * @return redirect:/user/edit/complete
 	 * またはgetSignup(ユーザー登録画面のgetメソッド)
 	 */
-	@PostMapping("/signup")
+	@PostMapping("/user/signup")
 	public String postSignup(@Validated @ModelAttribute SignupForm form,
 			BindingResult bindingResult,
 			Model model,
@@ -95,7 +95,7 @@ public class SignupController {
 		usersService.signUpUser(users, form.isAdmin());
 
 		//完了画面へ遷移
-		return "redirect:/complete";
+		return "redirect:/user/edit/complete";
 
 	}
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<link rel="stylesheet" th:href="@{/css/schedule/schedule.css}">
-<link rel="stylesheet" th:href="@{/css/common/header.css}">
+<link rel="stylesheet" th:href="@{/css/user/schedule.css}">
+<link rel="stylesheet" th:href="@{/css/header.css}">
 <script th:src="@{/js/plugin/jquery-3.7.1.min.js}"></script>
 <meta charset="UTF-8">
 <meta th:name="_csrf" th:content="${_csrf.token}">
@@ -12,7 +12,7 @@
 <body>
 	<header class="header_bg">
 		<div class="container">
-			<nav layout:replace="~{common/header::header}"></nav>
+			<nav layout:replace="~{header::header}"></nav>
 		</div>
 	</header>
 	<div class="wrap">
@@ -21,7 +21,7 @@
 				<span th:text="${user_name}"></span>
 				さんのスケジュール画面
 			</h1>
-			<a th:href="@{'/management'}">管理画面</a>
+			<a th:href="@{'/user/management'}">管理画面</a>
 		</div>
 		<form action="?" method="post">
 			<!-- アカウント名とユーザーＩＤはスケジュール登録時に使うのでhiddenで送る -->
@@ -82,6 +82,6 @@
 			</table>
 		</div>
 	</div>
-	<script th:src="@{/js/schedule.js}"></script>
+	<script th:src="@{/js/user/schedule.js}"></script>
 </body>
 </html>

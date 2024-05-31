@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" th:href="@{/css/user/signup.css}">
-<link rel="stylesheet" th:href="@{/css/common/header.css}">
+<link rel="stylesheet" th:href="@{/css/header.css}">
 <title>ユーザーの追加</title>
 </head>
 <body>
 	<header class="header_bg">
-		<nav layout:replace="~{common/header::header}"></nav>
+		<nav layout:replace="~{header::header}"></nav>
 	</header>
 	<div class="wrap">
-		<a th:href="@{'/management'}">管理画面へ戻る</a>
+		<a th:href="@{'/user/management'}">管理画面へ戻る</a>
 		<div class="insert-bg">
 			<h1>ユーザー追加</h1>
-			<form action="#" th:action="@{/signup}" method="post" th:object="${signUpForm}">
+			<form action="#" th:action="@{/user/signup}" method="post" th:object="${signupForm}">
 				<div>
 					<div th:errors="*{accountName}" class="errorMsg"></div>
 					<label>アカウント名</label> 
