@@ -47,7 +47,7 @@ public class EditRestController {
 
 			//エラーメッセージを格納
 			String errorMsg = messagesource.getMessage(
-					"004.validation.deleteFailed", null, Locale.JAPAN);
+					"DeleteFailed", null, Locale.JAPAN);
 			form.setErrorMsg(errorMsg);
 		}
 		return form;

@@ -40,11 +40,11 @@ public class ScheduleValidation {
 			Integer lastDay = scheduleService.getLastDayOfTheMonth(year, month);
 			if (lastDay < day_) {
 				// 日付のメッセージを取得する
-				msg = messagesource.getMessage("001.validation.maxRangeOfDays",
+				msg = messagesource.getMessage("MaxRangeOfDays",
 						new String[] {lastDay.toString()}, Locale.JAPAN);
 			}
 		} catch (Exception e) {
-			msg = messagesource.getMessage("005.validation.invalidStr", null, Locale.JAPAN);
+			msg = messagesource.getMessage("InvalidStr", null, Locale.JAPAN);
 		}
 
 		return msg;

@@ -17,8 +17,9 @@ import d_tanabe.sched_mgmt.config.UsersDetails;
 import d_tanabe.sched_mgmt.form.user.edit.PasswordForm;
 import d_tanabe.sched_mgmt.form.user.edit.EditForm;
 import d_tanabe.sched_mgmt.model.Users;
+import d_tanabe.sched_mgmt.security.XSSFilter;
 import d_tanabe.sched_mgmt.service.UsersService;
-import d_tanabe.sched_mgmt.validation.CommonValidation;
+import d_tanabe.sched_mgmt.util.message.MessageManager;
 import d_tanabe.sched_mgmt.validation.PasswordValidation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -39,7 +40,7 @@ public class EditController {
 
 	// 共通バリデーション
 	@Autowired
-	private CommonValidation commonValidation;
+	private XSSFilter commonValidation;
 
 	// パスワード画面のバリデーション
 	@Autowired
@@ -58,18 +59,18 @@ public class EditController {
 	 * @return /user/edit/edit
 	 */
 	@GetMapping("/user/edit")
-	public String getUsersDetail(@ModelAttribute EditForm form, Model model,
-			HttpServletRequest request) {
+	public String getUsersDetail(
+		@ModelAttribute EditForm form,
+		Model model,
+		HttpServletRequest request) {
 
 		// セッションを取得する
 		session = request.getSession();
-
 		model.addAttribute("loginUser",
 				commonValidation.escapeStr(session.getAttribute("loginUser").toString()));
 
 		// ユーザーIDからユーザー情報を検索する
 		Users users = usersService.findByUserId(form.getUserId());
-		System.out.println(users.getId() + "aaaaasssssssssssssssss");
 		model.addAttribute("userId", users.getId());
 		model.addAttribute("accountName", commonValidation.escapeStr(users.getAccountName()));
 		model.addAttribute("userName", commonValidation.escapeStr(users.getUserName()));
@@ -95,9 +96,13 @@ public class EditController {
 	 * @return getUsersDetail(詳細画面のゲットメソッド) またはredirect:/logout またはredirect:/user/edit/complete
 	 */
 	@PostMapping("/user/edit/update")
-	public String postUpdateUser(@AuthenticationPrincipal UsersDetails user,
-			@Validated @ModelAttribute EditForm form, BindingResult bindingResult, Model model,
-			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	public String postUpdateUser(
+		@AuthenticationPrincipal UsersDetails user,
+		@Validated @ModelAttribute EditForm form,
+		BindingResult bindingResult,
+		Model model,
+		RedirectAttributes redirectAttributes,
+		HttpServletRequest request) {
 
 		// バリデーション
 		if (bindingResult.hasErrors()) {
@@ -114,7 +119,7 @@ public class EditController {
 		usersService.upDateUser(users, form.isAdmin(), form.isStatus());
 
 		// メッセージをセットする
-		redirectAttributes.addFlashAttribute("message", usersService.getCompleteMessage("2"));
+		redirectAttributes.addFlashAttribute("message", MessageManager.UPDATE_COMPLETE.getMessage(messagesource));
 
 		// 更新者が自分の情報を更新したときはログアウト
 		if (form.getUserId() == user.getUserId()) {
@@ -138,9 +143,13 @@ public class EditController {
 	 * @return getUsersDetail(詳細画面のゲットメソッド) またはredirect:/logout またはredirect:/user/edit/complete
 	 */
 	@PostMapping("/user/edit/delete")
-	public String postDeleteUser(@AuthenticationPrincipal UsersDetails user,
-			@Validated @ModelAttribute EditForm form, BindingResult bindingResult, Model model,
-			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	public String postDeleteUser(
+		@AuthenticationPrincipal UsersDetails user,
+		@Validated @ModelAttribute EditForm form,
+		BindingResult bindingResult,
+		Model model,
+		RedirectAttributes redirectAttributes,
+		HttpServletRequest request) {
 
 		// バリデーション
 		if (bindingResult.hasErrors()) {
@@ -151,7 +160,7 @@ public class EditController {
 		usersService.deleteUser(form.getUserId());
 
 		// メッセージをセットする
-		redirectAttributes.addFlashAttribute("message", usersService.getCompleteMessage("3"));
+		redirectAttributes.addFlashAttribute("message", usersService.getcomplete("3"));
 
 		// 更新社が自分の情報を削除したときはログアウト
 		if (form.getUserId() == user.getUserId()) {
@@ -172,8 +181,10 @@ public class EditController {
 	 * @return user/edit/password
 	 */
 	@GetMapping("/user/edit/password")
-	public String getEditPassword(@ModelAttribute PasswordForm form, Model model,
-			HttpServletRequest request) {
+	public String getEditPassword(
+		@ModelAttribute PasswordForm form,
+		Model model,
+		HttpServletRequest request) {
 
 		// セッションを取得する
 		session = request.getSession();
@@ -223,7 +234,7 @@ public class EditController {
 
 				// メッセージをセット
 				redirectAttributes.addFlashAttribute("message",
-						usersService.getCompleteMessage("4"));
+						usersService.getcomplete("4"));
 
 				// 完了画面へ遷移
 				return "redirect:/user/edit/complete";
@@ -238,7 +249,7 @@ public class EditController {
 		} else {
 
 			// エラーメッセージを格納してgetへ
-			errorMsg = messagesource.getMessage("002.validation.notUser", null, Locale.JAPAN);
+			errorMsg = messagesource.getMessage("IsNotUser", null, Locale.JAPAN);
 			model.addAttribute("failMsg", errorMsg);
 			return getEditPassword(form, model, request);
 		}

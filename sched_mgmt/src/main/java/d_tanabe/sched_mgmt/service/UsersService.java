@@ -61,9 +61,9 @@ public interface UsersService {
 
 	/**
 	 * 完了画面に表示するメッセージを取得する
-	 * @param completeMessageFlg
+	 * @param completeFlg
 	 * @return メッセージ
 	 */
-	public String getCompleteMessage(String completeMessageFlg);
+	public String getcomplete(String completeFlg);
 
 }

@@ -23,7 +23,7 @@ public class PasswordValidation {
 		String msg = "";
 		if (!pass1.equals(pass2)) {
 			//メッセージを取得する
-			msg = messagesource.getMessage("003.validation.notNewPasswords", null, Locale.JAPAN);
+			msg = messagesource.getMessage("IsNotNewPassword", null, Locale.JAPAN);
 		}
 		return msg;
 

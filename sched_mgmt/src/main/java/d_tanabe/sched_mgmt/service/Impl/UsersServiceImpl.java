@@ -134,18 +134,18 @@ public class UsersServiceImpl implements UsersService {
 	 * メッセージを取得する
 	 */
 	@Override
-	public String getCompleteMessage(String completeMessageFlg) {
+	public String getcomplete(String completeFlg) {
 
 		String message = null;
 		//messages.propertiesからメッセージを取得する
-		if ("1".equals(completeMessageFlg)) {
-			message = messagesource.getMessage("completeMessage", new String[] { "登録" }, Locale.JAPAN);
-		} else if ("2".equals(completeMessageFlg)) {
-			message = messagesource.getMessage("completeMessage", new String[] { "更新" }, Locale.JAPAN);
-		} else if ("3".equals(completeMessageFlg)) {
-			message = messagesource.getMessage("completeMessage", new String[] { "削除" }, Locale.JAPAN);
-		} else if ("4".equals(completeMessageFlg)) {
-			message = messagesource.getMessage("completeMessage", new String[] { "パスワードの更新" }, Locale.JAPAN);
+		if ("1".equals(completeFlg)) {
+			message = messagesource.getMessage("complete", new String[] { "登録" }, Locale.JAPAN);
+		} else if ("2".equals(completeFlg)) {
+			message = messagesource.getMessage("complete", new String[] { "更新" }, Locale.JAPAN);
+		} else if ("3".equals(completeFlg)) {
+			message = messagesource.getMessage("complete", new String[] { "削除" }, Locale.JAPAN);
+		} else if ("4".equals(completeFlg)) {
+			message = messagesource.getMessage("complete", new String[] { "パスワードの更新" }, Locale.JAPAN);
 		}
 		return message;
 

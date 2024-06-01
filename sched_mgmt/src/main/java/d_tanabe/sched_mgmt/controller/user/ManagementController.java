@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import d_tanabe.sched_mgmt.config.UsersDetails;
 import d_tanabe.sched_mgmt.form.user.ManagementForm;
 import d_tanabe.sched_mgmt.model.Users;
+import d_tanabe.sched_mgmt.security.XSSFilter;
 import d_tanabe.sched_mgmt.service.UsersService;
-import d_tanabe.sched_mgmt.validation.CommonValidation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -33,7 +33,7 @@ public class ManagementController {
 
 	//共通バリデーション
 	@Autowired
-	private CommonValidation commonValidation;
+	private XSSFilter commonValidation;
 
 	//一ページあたりに表示するデータ数
 	private final int perPage = 10;
@@ -60,7 +60,7 @@ public class ManagementController {
 
 		//nullの場合
 		if (session.getAttribute("loginUser") == null) {
-			System.out.println("新しくセッションを設定");
+
 			//セッションにユーザー名を設定する
 			session.setAttribute("loginUser", user.getUserName());
 
@@ -89,7 +89,6 @@ public class ManagementController {
 		model.addAttribute("usersList", usersList);
 
 		//表示するページ数をセット
-		System.out.println(perPage + usersList.get(0).getTotalUsers());
 		int totalPage = (int) Math.ceil(
 				usersList.get(0).getTotalUsers() / (double) perPage);
 		model.addAttribute("totalPage", totalPage);
@@ -163,7 +162,6 @@ public class ManagementController {
 			model.addAttribute("nextPage", 2);
 		}
 
-		//スケージュールマップを返却
 		return "user/management";
 	}
 
@@ -232,7 +230,6 @@ public class ManagementController {
 			model.addAttribute("nextPage", form.getCurrentPage() + 1);
 		}
 
-		//スケージュールマップを返却
 		return "user/management";
 	}
 }

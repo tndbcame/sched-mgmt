@@ -11,9 +11,9 @@ import d_tanabe.sched_mgmt.config.UsersDetails;
 import d_tanabe.sched_mgmt.form.user.ScheduleForm;
 import d_tanabe.sched_mgmt.model.Schedule;
 import d_tanabe.sched_mgmt.model.Users;
+import d_tanabe.sched_mgmt.security.XSSFilter;
 import d_tanabe.sched_mgmt.service.ScheduleService;
 import d_tanabe.sched_mgmt.service.UsersService;
-import d_tanabe.sched_mgmt.validation.CommonValidation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -35,7 +35,7 @@ public class ScheduleController {
 
 	//共通バリデーション
 	@Autowired
-	private CommonValidation commonValidation;
+	private XSSFilter commonValidation;
 
 	/**
 	 * スケジュール画面へ遷移する
@@ -57,7 +57,7 @@ public class ScheduleController {
 
 		//nullの場合
 		if (session.getAttribute("loginUser") == null) {
-			System.out.println("新しくセッションを設定");
+			
 			//セッションにユーザー名を設定する
 			session.setAttribute("loginUser", user.getUserName());
 

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import d_tanabe.sched_mgmt.form.user.SignupForm;
 import d_tanabe.sched_mgmt.model.Users;
+import d_tanabe.sched_mgmt.security.XSSFilter;
 import d_tanabe.sched_mgmt.service.UsersService;
-import d_tanabe.sched_mgmt.validation.CommonValidation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -31,7 +31,7 @@ public class SignupController {
 
 	//共通バリデーション
 	@Autowired
-	private CommonValidation commonValidation;
+	private XSSFilter commonValidation;
 
 	/**
 	 * ユーザー登録画面へ遷移する
@@ -83,7 +83,7 @@ public class SignupController {
 
 		//メッセージをセット
 		redirectAttributes.addFlashAttribute("message",
-				usersService.getCompleteMessage("1"));
+				usersService.getcomplete("1"));
 
 		//入力値を格納して登録する
 		Users users = new Users();

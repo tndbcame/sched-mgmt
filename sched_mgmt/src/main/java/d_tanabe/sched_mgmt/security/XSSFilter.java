@@ -1,15 +1,14 @@
-package d_tanabe.sched_mgmt.validation;
+package d_tanabe.sched_mgmt.security;
 
 import org.springframework.stereotype.Component;
 
 /**
- * 共通バリデーションクラス
+ * クロスサイトスクライピング対策用のフィルタークラス
  */
 @Component
-public class CommonValidation {
+public class XSSFilter {
 
 	/**
-	 * クロスサイトスクライピング対策
 	 * HTMLのタグに関係ある文字列をエスケープする
 	 * @param targetValue
 	 * @return String エスケープした文字列

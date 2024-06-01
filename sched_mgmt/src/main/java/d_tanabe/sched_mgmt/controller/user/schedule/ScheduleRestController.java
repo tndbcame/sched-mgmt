@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import d_tanabe.sched_mgmt.form.user.ScheduleForm;
 import d_tanabe.sched_mgmt.model.Schedule;
+import d_tanabe.sched_mgmt.security.XSSFilter;
 import d_tanabe.sched_mgmt.service.ScheduleService;
-import d_tanabe.sched_mgmt.validation.CommonValidation;
 import d_tanabe.sched_mgmt.validation.ScheduleValidation;
 
 
@@ -35,7 +35,7 @@ public class ScheduleRestController {
 
 	//共通バリデーション
 	@Autowired
-	private CommonValidation commonValidation;
+	private XSSFilter commonValidation;
 
 	/**
 	 * スケジュールを登録する
