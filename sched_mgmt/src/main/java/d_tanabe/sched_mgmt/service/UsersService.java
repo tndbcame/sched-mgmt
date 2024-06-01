@@ -59,11 +59,4 @@ public interface UsersService {
 	 */
 	public void deleteUser(Integer userId);
 
-	/**
-	 * 完了画面に表示するメッセージを取得する
-	 * @param completeFlg
-	 * @return メッセージ
-	 */
-	public String getcomplete(String completeFlg);
-
 }

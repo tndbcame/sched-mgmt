@@ -8,6 +8,9 @@ spring:
         password: postgresql
     messages:
         basename: prop/messages,prop/validation_messages
+    devtools:
+       restart:
+           enabled: false
 mybatis:
     configuration:
         map-underscore-to-camel-case: true

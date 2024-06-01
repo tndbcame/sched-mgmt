@@ -35,10 +35,10 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
 
 			//権限が無効の場合
 		} else if ("2".equals(authenticationList.get(0).getAuthority())) {
-			response.sendRedirect(request.getContextPath() + "/login");
+			response.sendRedirect(request.getContextPath() + "/user/schedule");
 
 		} else {
-			response.sendRedirect(request.getContextPath() + "/user/schedule");
+			response.sendRedirect(request.getContextPath() + "/login");
 		}
 	}
 

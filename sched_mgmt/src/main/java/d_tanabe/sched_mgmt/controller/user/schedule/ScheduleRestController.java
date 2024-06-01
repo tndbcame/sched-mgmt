@@ -8,6 +8,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +17,7 @@ import d_tanabe.sched_mgmt.form.user.ScheduleForm;
 import d_tanabe.sched_mgmt.model.Schedule;
 import d_tanabe.sched_mgmt.security.XSSFilter;
 import d_tanabe.sched_mgmt.service.ScheduleService;
-import d_tanabe.sched_mgmt.validation.ScheduleValidation;
+import d_tanabe.sched_mgmt.validator.ScheduleValidator;
 
 
 /**
@@ -31,14 +33,20 @@ public class ScheduleRestController {
 	MessageSource massageSource;
 
 	@Autowired
-	ScheduleValidation scheduleValidation;
+	ScheduleValidator scheduleValidator;
 
-	//共通バリデーション
+	// 共通バリデーション
 	@Autowired
-	private XSSFilter commonValidation;
+	private XSSFilter xssFilter;
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.addValidators(scheduleValidator);
+	}
 
 	/**
 	 * スケジュールを登録する
+	 * 
 	 * @param form (スケジュール画面からの入力をバインド)
 	 * @param bindingResult
 	 * @return form
@@ -49,17 +57,12 @@ public class ScheduleRestController {
 
 		Schedule schedule = new Schedule();
 
-		String errorMessages = "";
+		// バリデーションチェック
+		if (bindingResult.hasErrors()) {
 
-		//日付は月末日が動的な値のためバリデーションを別で定義
-		String msg = scheduleValidation.getDayOfTheLastMonthErrorMsg(form.getYear(),
-				form.getMonth(),
-				form.getDay());
+			String errorMessages = "";
 
-		//バリデーションチェック
-		if (bindingResult.hasErrors() || !msg.isEmpty()) {
-
-			//formでチェックしたエラーはここで取得
+			// formでチェックしたエラーはここで取得
 			if (bindingResult.hasErrors()) {
 				for (ObjectError error : bindingResult.getAllErrors()) {
 					// エラーメッセージ取得
@@ -67,32 +70,28 @@ public class ScheduleRestController {
 				}
 			}
 
-			//日付のメッセージは別で取得
-			if (!msg.isEmpty()) {
-				errorMessages += "\n" + msg;
-			}
-
-			//エラーメッセージをセットして返却
+			// エラーメッセージをセットして返却
 			form.setErrorMsg(errorMessages);
 			return form;
 		}
 
-		//スケージュールをセット
+		// スケージュールをセット
 		schedule.setId(form.getUserId());
 		schedule.setUserId(form.getUserId());
 		schedule.setSchedule(form.getSchedule());
 
-		//スケージュールを登録
+		// スケージュールを登録
 		scheduleService.insertSchedule(schedule, form.getYear(), form.getMonth(), form.getDay());
 
-		//スケジュール内容は不正文字列がないかエスケープする
-		form.setSchedule(commonValidation.escapeStr(form.getSchedule()));
+		// スケジュール内容は不正文字列がないかエスケープする
+		form.setSchedule(xssFilter.escapeStr(form.getSchedule()));
 
 		return form;
 	}
 
 	/**
 	 * スケジュールを表示する
+	 * 
 	 * @param form (スケジュール画面からの入力をバインド)
 	 * @return scheduleMap(key:Days value:schedule)
 	 */
@@ -101,17 +100,16 @@ public class ScheduleRestController {
 
 		Schedule schedule = new Schedule();
 
-		//ユーザーIDを設定をする
+		// ユーザーIDを設定をする
 		schedule.setUserId(form.getUserId());
 
-		//スケージュールマップを取得
-		HashMap<Integer, String> scheduleMap = scheduleService.selectSchedule(schedule, form.getYear(),
-				form.getMonth());
+		// スケージュールマップを取得
+		HashMap<Integer, String> scheduleMap =
+				scheduleService.selectSchedule(schedule, form.getYear(), form.getMonth());
 
-		//スケジュールを取得時にエスケープ処理をしてから返却
+		// スケジュールを取得時にエスケープ処理をしてから返却
 		for (Entry<Integer, String> entry : scheduleMap.entrySet()) {
-			scheduleMap.put(entry.getKey(),
-					commonValidation.escapeStr(entry.getValue()));
+			scheduleMap.put(entry.getKey(), xssFilter.escapeStr(entry.getValue()));
 		}
 
 		return scheduleMap;

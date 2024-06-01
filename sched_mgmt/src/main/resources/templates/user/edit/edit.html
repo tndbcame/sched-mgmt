@@ -16,7 +16,7 @@
 	</header>
 	<div class="wrap">
 		<a th:href="@{'/user/management'}">管理画面へ戻る</a>
-		<a class="password-link" th:href="@{/user/edit/password(userId=${editForm.userId})}">パスワードの変更はこちら</a>
+		<a class="password-link" th:href="@{/user/edit/{userId}/password(userId=${editForm.userId})}">パスワードの変更はこちら</a>
 		<div class="insert-bg">
 			<h1>ユーザー編集</h1>
 			<form th:action="@{/}" name="form" method="post" th:object="${editForm}">

@@ -1,6 +1,7 @@
 package d_tanabe.sched_mgmt.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import d_tanabe.sched_mgmt.form.user.SignupForm;
 import d_tanabe.sched_mgmt.model.Users;
 import d_tanabe.sched_mgmt.security.XSSFilter;
 import d_tanabe.sched_mgmt.service.UsersService;
+import d_tanabe.sched_mgmt.util.message.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -31,7 +33,11 @@ public class SignupController {
 
 	//共通バリデーション
 	@Autowired
-	private XSSFilter commonValidation;
+	private XSSFilter xssFilter;
+
+	// メッセージ
+	@Autowired
+	MessageSource messagesource;
 
 	/**
 	 * ユーザー登録画面へ遷移する
@@ -55,7 +61,7 @@ public class SignupController {
 		}
 
 		model.addAttribute("loginUser",
-				commonValidation.escapeStr(session.getAttribute("loginUser").toString()));
+				xssFilter.escapeStr(session.getAttribute("loginUser").toString()));
 		return "user/signup";
 	}
 
@@ -83,7 +89,7 @@ public class SignupController {
 
 		//メッセージをセット
 		redirectAttributes.addFlashAttribute("message",
-				usersService.getcomplete("1"));
+				MessageManager.UPDATE_COMPLETE.getMessage(messagesource));
 
 		//入力値を格納して登録する
 		Users users = new Users();

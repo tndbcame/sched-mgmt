@@ -33,7 +33,7 @@ public class ManagementController {
 
 	//共通バリデーション
 	@Autowired
-	private XSSFilter commonValidation;
+	private XSSFilter xssFilter;
 
 	//一ページあたりに表示するデータ数
 	private final int perPage = 10;
@@ -70,7 +70,7 @@ public class ManagementController {
 		}
 
 		model.addAttribute("loginUser",
-				commonValidation.escapeStr(session.getAttribute("loginUser").toString()));
+				xssFilter.escapeStr(session.getAttribute("loginUser").toString()));
 
 		Users users = new Users();
 

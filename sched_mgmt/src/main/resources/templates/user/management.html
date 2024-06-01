@@ -61,7 +61,7 @@
 						</td>
 						<td th:text="${user.role}"></td>
 						<td th:text="${user.status}"></td>
-						<td><a th:href="@{/user/edit(userId=${user.id})}">
+						<td><a th:href="@{/user/edit/{userId}(userId=${user.id})}">
 								編集
 							</a>
 						</td>

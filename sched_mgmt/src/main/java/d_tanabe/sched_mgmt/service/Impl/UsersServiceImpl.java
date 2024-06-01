@@ -1,7 +1,6 @@
 package d_tanabe.sched_mgmt.service.Impl;
 
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -128,26 +127,5 @@ public class UsersServiceImpl implements UsersService {
 	@Override
 	public void deleteUser(Integer userId) {
 		usersMapper.deleteUser(userId);
-	}
-
-	/**
-	 * メッセージを取得する
-	 */
-	@Override
-	public String getcomplete(String completeFlg) {
-
-		String message = null;
-		//messages.propertiesからメッセージを取得する
-		if ("1".equals(completeFlg)) {
-			message = messagesource.getMessage("complete", new String[] { "登録" }, Locale.JAPAN);
-		} else if ("2".equals(completeFlg)) {
-			message = messagesource.getMessage("complete", new String[] { "更新" }, Locale.JAPAN);
-		} else if ("3".equals(completeFlg)) {
-			message = messagesource.getMessage("complete", new String[] { "削除" }, Locale.JAPAN);
-		} else if ("4".equals(completeFlg)) {
-			message = messagesource.getMessage("complete", new String[] { "パスワードの更新" }, Locale.JAPAN);
-		}
-		return message;
-
 	}
 }

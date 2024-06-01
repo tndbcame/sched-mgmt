@@ -43,7 +43,7 @@ public class SecurityConfig {
 
 		//認可の設定
 		http.authorizeHttpRequests(authz -> authz
-				.requestMatchers("/user/management", "/user/signup", "/user/edit")
+				.requestMatchers("/user/management", "/user/signup", "/user/edit/{userId}")
 				.hasAuthority("1")//ADMINのみが入れるページ
 				.requestMatchers("/user/schedule")
 				.hasAnyAuthority("2", "1")//USERも入れるページ

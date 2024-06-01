@@ -35,7 +35,7 @@ public class ScheduleController {
 
 	//共通バリデーション
 	@Autowired
-	private XSSFilter commonValidation;
+	private XSSFilter xssFilter;
 
 	/**
 	 * スケジュール画面へ遷移する
@@ -64,10 +64,10 @@ public class ScheduleController {
 			//ログインユーザーが異なる場合
 		} else if (!session.getAttribute("loginUser").equals(user.getUserName())) {
 			session.setAttribute("loginUser",
-					commonValidation.escapeStr(user.getUserName().toString()));
+					xssFilter.escapeStr(user.getUserName().toString()));
 		}
 		model.addAttribute("loginUser",
-				commonValidation.escapeStr(session.getAttribute("loginUser").toString()));
+				xssFilter.escapeStr(session.getAttribute("loginUser").toString()));
 
 		Schedule schedule = new Schedule();
 
@@ -80,16 +80,16 @@ public class ScheduleController {
 
 			model.addAttribute("user_id", users.getId());
 			model.addAttribute("account_name",
-					commonValidation.escapeStr(users.getAccountName()));
+					xssFilter.escapeStr(users.getAccountName()));
 			model.addAttribute("user_name",
-					commonValidation.escapeStr(users.getUserName()));
+					xssFilter.escapeStr(users.getUserName()));
 			schedule.setUserId(users.getId());
 		} else {
 			model.addAttribute("user_id", user.getUserId());
 			model.addAttribute("account_name",
-					commonValidation.escapeStr(user.getUsername()));
+					xssFilter.escapeStr(user.getUsername()));
 			model.addAttribute("user_name",
-					commonValidation.escapeStr(user.getUserName()));
+					xssFilter.escapeStr(user.getUserName()));
 			schedule.setUserId(user.getUserId());
 		}
 
