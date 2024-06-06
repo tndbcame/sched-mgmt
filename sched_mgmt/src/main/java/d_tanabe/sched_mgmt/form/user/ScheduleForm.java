@@ -22,7 +22,8 @@ public class ScheduleForm {
 	private String day;
 	@NotBlank
 	private String schedule;
-
-	//エラー時のメッセージを格納
+	/**
+	 * 	エラー時のメッセージを格納
+	 */
 	private String errorMsg;
 }

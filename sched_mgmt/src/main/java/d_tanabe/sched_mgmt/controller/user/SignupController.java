@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import d_tanabe.sched_mgmt.form.user.SignupForm;
 import d_tanabe.sched_mgmt.model.Users;
 import d_tanabe.sched_mgmt.security.XSSFilter;
@@ -24,38 +25,31 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class SignupController {
 
-	//セッション
 	@Autowired
 	private HttpSession session;
-
 	@Autowired
 	UsersService usersService;
-
-	//共通バリデーション
 	@Autowired
 	private XSSFilter xssFilter;
-
-	// メッセージ
 	@Autowired
 	MessageSource messagesource;
 
 	/**
 	 * ユーザー登録画面へ遷移する
+	 * 
 	 * @param form (ユーザー登録画面からの入力をバインド)
 	 * @param model
 	 * @param request
-	 * @return user/signup
-	 * またはredirect:/login
+	 * @return user/signup またはredirect:/login
 	 */
 	@GetMapping("/user/signup")
-	public String getSignup(@ModelAttribute SignupForm form,
-			Model model,
-			HttpServletRequest request) {
-
-		//セッションを取得する
+	public String getSignup(
+		@ModelAttribute SignupForm form,
+		Model model,
+		HttpServletRequest request) {
 		session = request.getSession();
 
-		//セッションがない場合はログアウト
+		// セッションがない場合はログアウト
 		if (session.getAttribute("loginUser") == null) {
 			return "redirect:/login";
 		}
@@ -67,41 +61,37 @@ public class SignupController {
 
 	/**
 	 * 新たにユーザーを登録する
+	 * 
 	 * @param form (ユーザー登録画面からの入力をバインド)
 	 * @param bindingResult
 	 * @param model
 	 * @param redirectAttributes
 	 * @param request
-	 * @return redirect:/user/edit/complete
-	 * またはgetSignup(ユーザー登録画面のgetメソッド)
+	 * @return redirect:/user/edit/complete またはgetSignup(ユーザー登録画面のgetメソッド)
 	 */
 	@PostMapping("/user/signup")
-	public String postSignup(@Validated @ModelAttribute SignupForm form,
-			BindingResult bindingResult,
-			Model model,
-			RedirectAttributes redirectAttributes,
-			HttpServletRequest request) {
+	public String postSignup(
+		@Validated @ModelAttribute SignupForm form,
+		BindingResult bindingResult,
+		Model model, 
+		RedirectAttributes redirectAttributes,
+		HttpServletRequest request) {
 
-		//バリデーションチェック
+		// バリデーション
 		if (bindingResult.hasErrors()) {
 			return getSignup(form, model, request);
 		}
 
-		//メッセージをセット
 		redirectAttributes.addFlashAttribute("message",
 				MessageManager.UPDATE_COMPLETE.getMessage(messagesource));
 
-		//入力値を格納して登録する
+		// 入力値を設定して登録する
 		Users users = new Users();
 		users.setAccountName(form.getAccountName());
 		users.setUserName(form.getUserName());
 		users.setPassword(form.getPassword());
+		usersService.signupUser(users, form.isAdmin());
 
-		//ユーザーを登録する
-		usersService.signUpUser(users, form.isAdmin());
-
-		//完了画面へ遷移
 		return "redirect:/user/edit/complete";
-
 	}
 }

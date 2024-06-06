@@ -1,4 +1,5 @@
 package d_tanabe.sched_mgmt.controller.user.edit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,33 +26,26 @@ import jakarta.servlet.http.HttpSession;
  */
 @Controller
 public class EditController {
-
-	// セッション
+	
 	@Autowired
 	private HttpSession session;
-
-	// サービスクラス
 	@Autowired
 	private UsersService usersService;
-
-	// 共通バリデーション
 	@Autowired
 	private XSSFilter xssFilter;
-
-	// メッセージ
 	@Autowired
 	MessageSource messagesource;
 
 	/**
-	 * ユーザー詳細画面へ遷移する
+	 * ユーザー編集画面へ遷移する
 	 * 
-	 * @param form (詳細画面からの入力をバインド)
+	 * @param form (編集画面からの入力をバインド)
 	 * @param model
 	 * @param request
 	 * @return /user/edit/edit
 	 */
 	@GetMapping("/user/edit/{userId}")
-	public String getUsersDetail(
+	public String getEdit(
 		@ModelAttribute EditForm form,
 		Model model,
 		HttpServletRequest request) {
@@ -59,20 +53,23 @@ public class EditController {
 		// セッションを取得する
 		session = request.getSession();
 		model.addAttribute("loginUser",
-				xssFilter.escapeStr(session.getAttribute("loginUser").toString()));
+			xssFilter.escapeStr(session.getAttribute("loginUser").toString()));
 
 		// ユーザーIDからユーザー情報を検索する
-		Users users = usersService.findByUserId(form.getUserId());
+		Users users = usersService.selectByUserId(form.getUserId());
+
 		model.addAttribute("userId", users.getId());
 		model.addAttribute("accountName", xssFilter.escapeStr(users.getAccountName()));
 		model.addAttribute("userName", xssFilter.escapeStr(users.getUserName()));
-		if ("1".equals(users.getRole())) {
+
+		//権限が1の時trueする
+		if ("1".equals(users.getRole())){
 			model.addAttribute("admin", true);
 		}
-		if ("2".equals(users.getStatus())) {
+		//ステータスが2の時をtrueする
+		if ("2".equals(users.getStatus())){
 			model.addAttribute("status", true);
 		}
-
 		return "/user/edit/edit";
 	}
 
@@ -80,29 +77,33 @@ public class EditController {
 	 * ユーザー情報を更新する
 	 * 
 	 * @param user (ログイン情報を保持しているクラス)
-	 * @param form (詳細画面からの入力をバインド)
+	 * @param form (編集画面からの入力をバインド)
 	 * @param bindingResult
 	 * @param model
 	 * @param redirectAttributes
 	 * @param request
-	 * @return getUsersDetail(詳細画面のゲットメソッド) またはredirect:/logout またはredirect:/user/edit/complete
+	 * @return getEdit(),/logout,/user/edit/completeの内どれか
 	 */
 	@PostMapping("/user/edit/update")
-	public String postUpdateUser(@AuthenticationPrincipal UsersDetails user,
-			@Validated @ModelAttribute EditForm form, BindingResult bindingResult, Model model,
-			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	public String postupdateUser(
+		@AuthenticationPrincipal UsersDetails user,
+		@Validated @ModelAttribute EditForm form,
+		BindingResult bindingResult,
+		Model model,
+		RedirectAttributes redirectAttributes,
+		HttpServletRequest request) {
 
 		// バリデーション
-		if (bindingResult.hasErrors())
-			return getUsersDetail( form, model, request);
-
+		if (bindingResult.hasErrors()){
+			return getEdit(form, model, request);
+		}
 		Users users = new Users();
 		users.setId(form.getUserId());
 		users.setAccountName(form.getAccountName());
 		users.setUserName(form.getUserName());
 
 		// ユーザー情報を更新する
-		usersService.upDateUser(users, form.isAdmin(), form.isStatus());
+		usersService.updateUser(users, form.isAdmin(), form.isStatus());
 
 		redirectAttributes.addFlashAttribute("message",
 				MessageManager.UPDATE_COMPLETE.getMessage(messagesource));
@@ -121,26 +122,29 @@ public class EditController {
 	 * ユーザーを削除する
 	 * 
 	 * @param user (ログイン情報を保持しているクラス)
-	 * @param form (詳細画面からの入力をバインド)
+	 * @param form (編集画面からの入力をバインド)
 	 * @param bindingResult
 	 * @param model
 	 * @param redirectAttributes
 	 * @param request
-	 * @return getUsersDetail(詳細画面のゲットメソッド) またはredirect:/logout またはredirect:/user/edit/complete
+	 * @return getEdit(編集画面のゲットメソッド) またはredirect:/logout またはredirect:/user/edit/complete
 	 */
 	@PostMapping("/user/edit/delete")
-	public String postDeleteUser(@AuthenticationPrincipal UsersDetails user,
-			@Validated @ModelAttribute EditForm form, BindingResult bindingResult, Model model,
-			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	public String postDeleteUser(
+		@AuthenticationPrincipal UsersDetails user,
+		@Validated @ModelAttribute EditForm form,
+		BindingResult bindingResult,
+		Model model,
+		RedirectAttributes redirectAttributes,
+		HttpServletRequest request) {
 
 		// バリデーション
-		if (bindingResult.hasErrors())
-			return getUsersDetail(form, model, request);
-
+		if (bindingResult.hasErrors()){
+			return getEdit(form, model, request);
+		}
 		// ユーザーを削除
 		usersService.deleteUser(form.getUserId());
 
-		// メッセージをセットする
 		redirectAttributes.addFlashAttribute("message",
 				MessageManager.DELETE_COMPLETE.getMessage(messagesource));
 
@@ -171,10 +175,7 @@ public class EditController {
 		if (message == null) {
 			return "redirect:/user/management";
 		}
-
-		// セッションを取得する
 		session = request.getSession();
-
 		model.addAttribute("loginUser",
 				xssFilter.escapeStr(session.getAttribute("loginUser").toString()));
 

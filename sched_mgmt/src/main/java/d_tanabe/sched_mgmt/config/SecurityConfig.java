@@ -11,8 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration //オブジェクトが Bean 定義のソースであることを示すクラスレベルのアノテーション、Bean を宣言することができる
-@EnableWebSecurity //Spring Securityを有効にする
+@Configuration
+@EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
@@ -22,6 +22,7 @@ public class SecurityConfig {
 	/**
 	 * セキュリティ情報のフィルタ処理
 	 * セキュリティ関係の設定をする
+	 * 
 	 * @param http
 	 * @return SecurityFilterChain
 	 * @throws Exception
@@ -29,36 +30,37 @@ public class SecurityConfig {
 	@Bean
 	protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-		//ログイン処理
+		// ログイン
 		http.formLogin(login -> login
-				.loginPage("/login").permitAll()//ログインページの指定
-				.successHandler(successHandler)//ログイン成功時の画面遷移
-				.usernameParameter("account_name")//ログインページのユーザーID
-				.passwordParameter("password"));//ログインページのパスワード
+				.loginPage("/login").permitAll()// ログインページの指定
+				.successHandler(successHandler)// ログイン成功時の画面遷移
+				.usernameParameter("account_name")
+				.passwordParameter("password"));
 
-		//ログアウト処理
+		// ログアウト
 		http.logout(logout -> logout
 				.logoutUrl("/logout")
 				.logoutSuccessUrl("/login?logout").permitAll());
 
-		//認可の設定
+		// 認可の設定
 		http.authorizeHttpRequests(authz -> authz
 				.requestMatchers("/user/management", "/user/signup", "/user/edit/{userId}")
-				.hasAuthority("1")//ADMINのみが入れるページ
+				.hasAuthority("1")// ADMINのみが入れるページ
 				.requestMatchers("/user/schedule")
-				.hasAnyAuthority("2", "1")//USERも入れるページ
+				.hasAnyAuthority("2", "1")// USERも入れるページ
 				.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-				.permitAll()//一般的な静的ファイルパス（"/css/**"など）に対し、非ログインでのアクセスを許可
+				.permitAll()// 一般的な静的ファイルパス（"/css/**"など）に対し、非ログインでのアクセスを許可
 				.requestMatchers("/", "/login", "/error", "/login-error")
 				.permitAll() // 全ユーザーアクセス許可
-				//指定していないパスについては、ログイン済みならアクセスを許可
 				.anyRequest().authenticated());
+				// 指定していないパスについては、ログイン済みならアクセスを許可
 
 		return http.build();
 	}
 
 	/**
 	 * パスワードをハッシュ化
+	 * 
 	 * @return PasswordEncoder
 	 */
 	@Bean

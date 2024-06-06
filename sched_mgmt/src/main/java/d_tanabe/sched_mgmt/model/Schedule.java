@@ -8,6 +8,7 @@ import lombok.Data;
  */
 @Data
 public class Schedule {
+	
 	private Integer id;
 	private Integer userId;
 	private Date date;

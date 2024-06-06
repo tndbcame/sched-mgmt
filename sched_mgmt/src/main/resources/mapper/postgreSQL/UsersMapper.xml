@@ -36,30 +36,30 @@
 		OFFSET #{currentPage}
 	</select>
 	<!-- ユーザー管理テーブルからユーザー情報を取得(一件) -->
-	<select id="findByAccountName" resultMap="loginUser">
+	<select id="selectByAccountName" resultMap="loginUser">
 		select * from users where account_name = #{accountName}
 	</select>
 	<!-- ユーザーIDからユーザー情報を検索する(一件) -->
-	<select id="findByUserId" resultMap="loginUser">
+	<select id="selectByUserId" resultMap="loginUser">
 		select * from users where id = #{userId}
 	</select>
 	<!-- ユーザーIDからパスワードを取得する(一件) -->
-	<select id="findPassByUserId" resultType="String">
+	<select id="selectPassByUserId" resultType="String">
 		select password from users where id = #{userId}
 	</select>
 	<!-- ユーザー情報を登録する -->
-	<insert id="signUpUser">
+	<insert id="signupUser">
 		insert into users(account_name, user_name, password, role, status)
 		values (#{accountName}, #{userName}, #{password}, #{role}, #{status})
 	</insert>
 	<!-- ユーザー情報を更新する -->
-	<update id="upDateUser">
+	<update id="updateUser">
 		update users set account_name = #{accountName}, user_name = #{userName},
 		role = #{role}, status = #{status}
 		where id = #{id}
 	</update>
 	<!-- パスワードを更新する -->
-	<update id="upDatePassword">
+	<update id="updatePassword">
 		update users set password = #{password}
 		where id = #{userId}
 	</update>

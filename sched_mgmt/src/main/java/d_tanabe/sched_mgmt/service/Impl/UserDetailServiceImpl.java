@@ -28,7 +28,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String accountName) throws UsernameNotFoundException {
 
 		//ログイン情報取得
-		Users user = usersMapper.findByAccountName(accountName);
+		Users user = usersMapper.selectByAccountName(accountName);
 
 		//取得したデータが無い場合はエラーで落ちる
 		if (user == null) {

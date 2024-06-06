@@ -11,6 +11,7 @@ public class LoginController {
 
 	/**
 	 * ログイン画面へ遷移する
+	 * @return login
 	 */
 	@GetMapping("/login")
 	public String getLogin() {

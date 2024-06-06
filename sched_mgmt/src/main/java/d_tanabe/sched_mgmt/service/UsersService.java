@@ -21,7 +21,7 @@ public interface UsersService {
 	 * @param userId
 	 * @return Users
 	 */
-	public Users findByUserId(Integer userId);
+	public Users selectByUserId(Integer userId);
 	
 	/**
 	 * ユーザー存在チェック
@@ -36,7 +36,7 @@ public interface UsersService {
 	 * @param users
 	 * @param admin
 	 */
-	public void signUpUser(Users users, boolean admin);
+	public void signupUser(Users users, boolean admin);
 
 	/**
 	 * ユーザー情報を更新する
@@ -44,14 +44,14 @@ public interface UsersService {
 	 * @param admin
 	 * @param status
 	 */
-	public void upDateUser(Users users, boolean admin, boolean status);
+	public void updateUser(Users users, boolean admin, boolean status);
 
 	/**
 	 * パスワードを更新する
 	 * @param userId
 	 * @param password
 	 */
-	public void upDatePassword(Integer userId, String password);
+	public void updatePassword(Integer userId, String password);
 	
 	/**
 	 * ユーザーを削除する

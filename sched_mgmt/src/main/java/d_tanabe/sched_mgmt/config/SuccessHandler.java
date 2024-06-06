@@ -23,17 +23,20 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
 	 * ログイン成功後の画面遷移
 	 */
 	@Override
-	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-			Authentication authentication) throws IOException, ServletException {
+	public void onAuthenticationSuccess(
+		HttpServletRequest request,
+		HttpServletResponse response,
+		Authentication authentication
+		) throws IOException, ServletException {
 
-		//コネクション型からリストへ変換
-		List<GrantedAuthority> authenticationList = new ArrayList<>(authentication.getAuthorities());
+		List<GrantedAuthority> authenticationList =
+			new ArrayList<>(authentication.getAuthorities());
 
-		//権限がADMINかチェック
+		// 権限がADMINかチェック
 		if ("1".equals(authenticationList.get(0).getAuthority())) {
 			response.sendRedirect(request.getContextPath() + "/user/management");
 
-			//権限が無効の場合
+			// 権限が無効の場合
 		} else if ("2".equals(authenticationList.get(0).getAuthority())) {
 			response.sendRedirect(request.getContextPath() + "/user/schedule");
 

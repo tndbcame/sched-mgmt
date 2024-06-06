@@ -11,9 +11,10 @@ import lombok.Data;
  */
 @Data
 public class SignupForm {
-	@NotBlank //文字列がnull,空文字,空白スペースでないかチェック
+	
+	@NotBlank
 	@Pattern(regexp = "^[a-zA-Z0-9]+$") //半角英数字かチェック
-	@Length(min = 0, max = 10) //規定の文字数かチェック
+	@Length(min = 0, max = 10) 
 	private String accountName;
 	@NotBlank
 	private String userName;

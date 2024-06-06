@@ -14,7 +14,6 @@ import lombok.Data;
 public class EditForm {
 	@NotNull
 	private Integer userId;
-	
 	@NotBlank
 	@Pattern(regexp = "^[a-zA-Z0-9]+$")
 	@Length(min = 0, max = 10)
@@ -23,10 +22,12 @@ public class EditForm {
 	private String userName;
 	private boolean admin;
 	private boolean status;
-	
-	//非同期通信用のString型ID
+	/**
+	 * 非同期通信用のString型ID
+	 */
 	private String userIdStr;
-	
-	//エラー時のメッセージを格納
+	/**
+	 * エラー時のメッセージを格納
+	 */
 	private String errorMsg;
 }

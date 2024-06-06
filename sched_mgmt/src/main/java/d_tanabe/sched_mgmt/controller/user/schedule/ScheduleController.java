@@ -23,22 +23,18 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class ScheduleController {
 
-	//セッション
 	@Autowired
 	private HttpSession session;
-
 	@Autowired
 	ScheduleService scheduleService;
-
 	@Autowired
 	UsersService usersService;
-
-	//共通バリデーション
 	@Autowired
 	private XSSFilter xssFilter;
 
 	/**
 	 * スケジュール画面へ遷移する
+	 * 
 	 * @param user (ログイン情報を保持しているクラス)
 	 * @param form (スケジュール画面からの入力をバインド)
 	 * @param model
@@ -46,54 +42,45 @@ public class ScheduleController {
 	 * @return schedule/user/schedule
 	 */
 	@GetMapping("/user/schedule")
-	public String getSignup(@AuthenticationPrincipal UsersDetails user,
-			@ModelAttribute ScheduleForm form,
-			Model model,
-			HttpServletRequest request) {
+	public String getSignup(
+		@AuthenticationPrincipal UsersDetails user,
+		@ModelAttribute ScheduleForm form,
+		Model model,
+		HttpServletRequest request) {
 
-		//セッションを取得する
 		session = request.getSession();
-		model.addAttribute("loginUser", session.getAttribute("loginUser"));
-
-		//nullの場合
-		if (session.getAttribute("loginUser") == null) {
-			
-			//セッションにユーザー名を設定する
-			session.setAttribute("loginUser", user.getUserName());
-
-			//ログインユーザーが異なる場合
-		} else if (!session.getAttribute("loginUser").equals(user.getUserName())) {
-			session.setAttribute("loginUser",
-					xssFilter.escapeStr(user.getUserName().toString()));
+		Object loginUser = session.getAttribute("loginUser");
+		
+		// nullまたは異なるユーザーの場合はセッションを設定する
+		if (loginUser == null || !loginUser.equals(user.getUserName())) {
+			session.setAttribute("loginUser", xssFilter.escapeStr(user.getUserName()));
+			model.addAttribute("loginUser",xssFilter.escapeStr(user.getUserName()));
+		}else{
+			model.addAttribute("loginUser", xssFilter.escapeStr(loginUser.toString()));
 		}
-		model.addAttribute("loginUser",
-				xssFilter.escapeStr(session.getAttribute("loginUser").toString()));
 
 		Schedule schedule = new Schedule();
 
-		//各種(ユーザーID、アカウント名、ユーザー名)設定をする
-		//フォームのユーザーIDがnullの場合はログインしているユーザーの情報を設定
+		// 各種(ユーザーID、アカウント名、ユーザー名)設定をする
 		if (form.getUserId() != null) {
 
-			//ユーザーIDからユーザー情報を検索する
-			Users users = usersService.findByUserId(form.getUserId());
+			// ユーザーIDからユーザー情報を検索して設定
+			Users users = usersService.selectByUserId(form.getUserId());
 
 			model.addAttribute("user_id", users.getId());
-			model.addAttribute("account_name",
-					xssFilter.escapeStr(users.getAccountName()));
-			model.addAttribute("user_name",
-					xssFilter.escapeStr(users.getUserName()));
+			model.addAttribute("account_name", xssFilter.escapeStr(users.getAccountName()));
+			model.addAttribute("user_name", xssFilter.escapeStr(users.getUserName()));
 			schedule.setUserId(users.getId());
+
+		//nullの場合はログインしているユーザーの情報を設定
 		} else {
 			model.addAttribute("user_id", user.getUserId());
-			model.addAttribute("account_name",
-					xssFilter.escapeStr(user.getUsername()));
-			model.addAttribute("user_name",
-					xssFilter.escapeStr(user.getUserName()));
+			model.addAttribute("account_name", xssFilter.escapeStr(user.getUsername()));
+			model.addAttribute("user_name", xssFilter.escapeStr(user.getUserName()));
 			schedule.setUserId(user.getUserId());
 		}
 
-		//スケジュールをリストとして設定
+		// スケジュールをリストとして設定
 		model.addAttribute("scheduleMap", scheduleService.selectSchedule(schedule, "2023", "1"));
 
 		return "user/schedule";

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import d_tanabe.sched_mgmt.form.user.edit.PasswordForm;
 import d_tanabe.sched_mgmt.security.XSSFilter;
 import d_tanabe.sched_mgmt.service.UsersService;
@@ -22,24 +23,15 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class PasswordController {
-
-    // セッション
+    
     @Autowired
     private HttpSession session;
-
-    // サービスクラス
     @Autowired
     private UsersService usersService;
-
-    // 共通バリデーション
     @Autowired
     private XSSFilter xssFilter;
-
-    // メッセージ
     @Autowired
     MessageSource messagesource;
-
-    // パスワード画面のバリデーション
     @Autowired
     private PasswordValidator passwordValidator;
 
@@ -57,15 +49,16 @@ public class PasswordController {
      * @return user/edit/password
      */
     @GetMapping("/user/edit/{userId}/password")
-    public String getEditPassword(@ModelAttribute PasswordForm form, Model model,
-            HttpServletRequest request) {
+    public String getEditPassword(
+        @ModelAttribute PasswordForm form,
+        Model model,
+        HttpServletRequest request) {
 
-        // セッションを取得する
         session = request.getSession();
         model.addAttribute("loginUser",
-                xssFilter.escapeStr(session.getAttribute("loginUser").toString()));
+            xssFilter.escapeStr(session.getAttribute("loginUser").toString()));
 
-        // ユーザーIdをセット
+        //ユーザーIDを設定
         model.addAttribute("userId", form.getUserId());
 
         return "user/edit/password";
@@ -82,19 +75,18 @@ public class PasswordController {
      * @return redirect:/user/edit/complete または getPassword(パスワード変更画面のgetメソッド)
      */
     @PostMapping("/user/edit/password/update")
-    public String postEditUpdatePassword(@Validated @ModelAttribute PasswordForm form,
+    public String postEditupdatePassword(@Validated @ModelAttribute PasswordForm form,
             BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes,
             HttpServletRequest request) {
 
-        // バリデーションチェック
-        if (bindingResult.hasErrors()) {
+        // バリデーション
+        if (bindingResult.hasErrors()){
             return getEditPassword(form, model, request);
         }
-
         // パスワード更新
-        usersService.upDatePassword(form.getUserId(), form.getNewPassword());
+        usersService.updatePassword(form.getUserId(), form.getNewPassword());
 
-        // メッセージをセット
+        // メッセージ設定
         redirectAttributes.addFlashAttribute("message",
                 MessageManager.PASSWORD_UPDATE_COMPLETE.getMessage(messagesource));
 

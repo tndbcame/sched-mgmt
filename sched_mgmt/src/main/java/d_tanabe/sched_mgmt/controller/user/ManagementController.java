@@ -23,26 +23,24 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class ManagementController {
 
-	//セッション
 	@Autowired
 	private HttpSession session;
-
-	//サービスクラス
 	@Autowired
 	private UsersService usersService;
-
-	//共通バリデーション
 	@Autowired
 	private XSSFilter xssFilter;
-
-	//一ページあたりに表示するデータ数
+	/**
+	 * 一ページあたりに表示するデータ数
+	 */
 	private final int perPage = 10;
-
-	//表示するユーザーリストの開始位置のインデックスを設定
+	/**
+	 * 表示するユーザーリストの開始位置のインデックス
+	 */
 	private int startIndex = 0;
 
 	/**
 	 * ユーザー管理画面へ遷移する
+	 * 
 	 * @param form (ユーザー管理画面からの入力情報をバインド)
 	 * @param user (ログイン情報を保持しているクラス)
 	 * @param model
@@ -50,22 +48,17 @@ public class ManagementController {
 	 * @return user/management
 	 */
 	@GetMapping("/user/management")
-	public String getManagement(@ModelAttribute ManagementForm form,
-			@AuthenticationPrincipal UsersDetails user,
-			Model model,
-			HttpServletRequest request) {
+	public String getManagement(
+		@ModelAttribute ManagementForm form,
+		@AuthenticationPrincipal UsersDetails user,
+		Model model,
+		HttpServletRequest request) {
 
-		//セッションを取得する
 		session = request.getSession();
+		Object loginUser = session.getAttribute("loginUser");
 
-		//nullの場合
-		if (session.getAttribute("loginUser") == null) {
-
-			//セッションにユーザー名を設定する
-			session.setAttribute("loginUser", user.getUserName());
-
-			//ログインユーザーが異なる場合
-		} else if (!session.getAttribute("loginUser").equals(user.getUserName())) {
+		// nullまたはログインユーザーが異なる場合セッションを設定
+		if (loginUser == null || !loginUser.equals(user.getUserName())) {
 			session.setAttribute("loginUser", user.getUserName());
 		}
 
@@ -74,26 +67,25 @@ public class ManagementController {
 
 		Users users = new Users();
 
-		//初期表示は無効ユーザーも含んだ状態で検索
+		// 初期表示は無効ユーザーも含んだ状態で検索
 		users.setStatus("2");
 
-		//検索条件(初期値)を設定する
+		// 検索条件(初期値)を設定する
 		model.addAttribute("enteredUserId", form.getUserId());
 		model.addAttribute("enteredUserName", "");
 		model.addAttribute("enteredAccountName", "");
 		model.addAttribute("enteredStatus", true);
 		model.addAttribute("currentPage", 1);
 
-		//ユーザーを全件取得してセット
+		// ユーザーを全件取得してセット
 		List<Users> usersList = usersService.selectByUser(users, perPage, startIndex);
 		model.addAttribute("usersList", usersList);
 
-		//表示するページ数をセット
-		int totalPage = (int) Math.ceil(
-				usersList.get(0).getTotalUsers() / (double) perPage);
+		// 表示するページ数をセット
+		int totalPage = (int) Math.ceil(usersList.get(0).getTotalUsers() / (double) perPage);
 		model.addAttribute("totalPage", totalPage);
 
-		//次へと前へを設定する
+		// 次へと前へを設定する
 		model.addAttribute("prevPage", 1);
 		if (totalPage == 1) {
 			model.addAttribute("nextPage", totalPage);
@@ -102,11 +94,11 @@ public class ManagementController {
 		}
 
 		return "user/management";
-
 	}
 
 	/**
 	 * ユーザーを検索する
+	 * 
 	 * @param form (ユーザー管理画面からの入力情報をバインド)
 	 * @param user (ログイン情報を保持しているクラス)
 	 * @param model
@@ -114,18 +106,19 @@ public class ManagementController {
 	 * @return user/management
 	 */
 	@GetMapping("/user/management/search")
-	public String searchUsers(@ModelAttribute ManagementForm form,
-			@AuthenticationPrincipal UsersDetails user,
-			Model model,
-			HttpServletRequest request) {
+	public String searchUsers(
+		@ModelAttribute ManagementForm form,
+		@AuthenticationPrincipal UsersDetails user,
+		Model model,
+		HttpServletRequest request) {
 
-		//セッションを取得する
+		// セッションを取得する
 		session = request.getSession();
 		model.addAttribute("loginUser", session.getAttribute("loginUser"));
 
 		Users users = new Users();
 
-		//ユーザー情報をセットする
+		// ユーザー情報をセットする
 		users.setId(form.getUserId());
 		users.setAccountName(form.getAccountName());
 		users.setUserName(form.getUserName());
@@ -133,28 +126,27 @@ public class ManagementController {
 			users.setStatus("2");
 		}
 
-		//検索項目は保持
+		// 検索項目は保持
 		model.addAttribute("enteredUserId", form.getUserId());
 		model.addAttribute("enteredUserName", form.getUserName());
 		model.addAttribute("enteredAccountName", form.getAccountName());
 		model.addAttribute("enteredStatus", form.isStatus());
 		model.addAttribute("currentPage", 1);
 
-		//ユーザーを全件取得してセット
+		// ユーザーを全件取得してセット
 		List<Users> usersList = usersService.selectByUser(users, perPage, startIndex);
 		model.addAttribute("usersList", usersList);
 
-		//表示するページ数をセット
+		// 表示するページ数をセット
 		int totalPage = 1;
 		if (usersList.isEmpty()) {
 			model.addAttribute("totalPage", totalPage);
 		} else {
-			totalPage = (int) Math.ceil(
-					usersList.get(0).getTotalUsers() / (double) perPage);
+			totalPage = (int) Math.ceil(usersList.get(0).getTotalUsers() / (double) perPage);
 			model.addAttribute("totalPage", totalPage);
 		}
 
-		//次へと前へを設定する
+		// 次へと前へを設定する
 		model.addAttribute("prevPage", 1);
 		if (totalPage == 1) {
 			model.addAttribute("nextPage", totalPage);
@@ -167,6 +159,7 @@ public class ManagementController {
 
 	/**
 	 * ページング(数字を押下した時の処理)
+	 * 
 	 * @param form (ユーザー管理画面からの入力情報をバインド)
 	 * @param user (ログイン情報を保持しているクラス)
 	 * @param model
@@ -174,18 +167,19 @@ public class ManagementController {
 	 * @return user/management
 	 */
 	@GetMapping("/user/management/page")
-	public String pagingUsers(@ModelAttribute ManagementForm form,
-			@AuthenticationPrincipal UsersDetails user,
-			Model model,
-			HttpServletRequest request) {
+	public String pagingUsers(
+		@ModelAttribute ManagementForm form,
+		@AuthenticationPrincipal UsersDetails user,
+		Model model,
+		HttpServletRequest request) {
 
-		//セッションを取得する
+		// セッションを取得する
 		session = request.getSession();
 		model.addAttribute("loginUser", session.getAttribute("loginUser"));
 
 		Users users = new Users();
 
-		//ユーザー情報をセットする
+		// ユーザー情報をセットする
 		users.setId(form.getUserId());
 		users.setAccountName(form.getAccountName());
 		users.setUserName(form.getUserName());
@@ -193,31 +187,30 @@ public class ManagementController {
 			users.setStatus("2");
 		}
 
-		//検索項目は保持
+		// 検索項目は保持
 		model.addAttribute("enteredUserId", form.getUserId());
 		model.addAttribute("enteredUserName", form.getUserName());
 		model.addAttribute("enteredAccountName", form.getAccountName());
 		model.addAttribute("enteredStatus", form.isStatus());
 
-		//今いるページ
+		// 今いるページ
 		startIndex = (form.getCurrentPage() - 1) * perPage;
 		model.addAttribute("currentPage", form.getCurrentPage());
 
-		//ユーザーを全件取得してセット
+		// ユーザーを全件取得してセット
 		List<Users> usersList = usersService.selectByUser(users, perPage, startIndex);
 		model.addAttribute("usersList", usersList);
 
-		//表示するページ数をセット
+		// 表示するページ数をセット
 		int totalPage = 1;
 		if (usersList.isEmpty()) {
 			model.addAttribute("totalPage", totalPage);
 		} else {
-			totalPage = (int) Math.ceil(
-					usersList.get(0).getTotalUsers() / (double) perPage);
+			totalPage = (int) Math.ceil(usersList.get(0).getTotalUsers() / (double) perPage);
 			model.addAttribute("totalPage", totalPage);
 		}
 
-		//次へと前へを設定する
+		// 次へと前へを設定する
 		if (form.getCurrentPage() == 1) {
 			model.addAttribute("prevPage", form.getCurrentPage());
 		} else {

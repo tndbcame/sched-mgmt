@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import d_tanabe.sched_mgmt.form.user.ScheduleForm;
 import d_tanabe.sched_mgmt.model.Schedule;
 import d_tanabe.sched_mgmt.security.XSSFilter;
@@ -28,14 +29,10 @@ public class ScheduleRestController {
 
 	@Autowired
 	ScheduleService scheduleService;
-
 	@Autowired
 	MessageSource massageSource;
-
 	@Autowired
 	ScheduleValidator scheduleValidator;
-
-	// 共通バリデーション
 	@Autowired
 	private XSSFilter xssFilter;
 
@@ -52,8 +49,7 @@ public class ScheduleRestController {
 	 * @return form
 	 */
 	@PostMapping("/user/schedule/register")
-	public ScheduleForm insertSchedule(@Validated @RequestBody ScheduleForm form,
-			BindingResult bindingResult) {
+	public ScheduleForm insertSchedule(@Validated @RequestBody ScheduleForm form, BindingResult bindingResult) {
 
 		Schedule schedule = new Schedule();
 
@@ -75,7 +71,6 @@ public class ScheduleRestController {
 			return form;
 		}
 
-		// スケージュールをセット
 		schedule.setId(form.getUserId());
 		schedule.setUserId(form.getUserId());
 		schedule.setSchedule(form.getSchedule());
@@ -107,7 +102,7 @@ public class ScheduleRestController {
 		HashMap<Integer, String> scheduleMap =
 				scheduleService.selectSchedule(schedule, form.getYear(), form.getMonth());
 
-		// スケジュールを取得時にエスケープ処理をしてから返却
+		// スケジュールを取得時にエスケープしてから返却
 		for (Entry<Integer, String> entry : scheduleMap.entrySet()) {
 			scheduleMap.put(entry.getKey(), xssFilter.escapeStr(entry.getValue()));
 		}

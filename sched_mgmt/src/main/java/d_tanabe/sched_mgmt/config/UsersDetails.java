@@ -31,17 +31,18 @@ public class UsersDetails implements UserDetails {
 	 */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
+
 		if (authorities != null) {
 			return authorities;
 		}
-		//ユーザーの権限を取得して格納する
 		String role = this.user.getRole();
 
-		//無効ユーザーの場合は権限が無効になるように設定
+		// 無効ユーザーの場合は権限が無効になるように設定
 		if ("2".equals(this.user.getStatus())) {
 			role = this.user.getStatus();
 		}
 
+		// 権限付与
 		GrantedAuthority authority = new SimpleGrantedAuthority(role);
 		authorities = new ArrayList<>();
 		authorities.add(authority);
@@ -49,8 +50,8 @@ public class UsersDetails implements UserDetails {
 	}
 
 	/**
-	 * ユーザーIdを取得する
-	 * (独自メソッド)
+	 * ユーザーIdを取得(独自メソッド)
+	 * 
 	 * @return Integer
 	 */
 	public Integer getUserId() {
@@ -58,7 +59,7 @@ public class UsersDetails implements UserDetails {
 	}
 
 	/**
-	 * UserDetailsクラスのパスワード取得メソッド
+	 * UserDetailsクラスのパスワード取得
 	 */
 	@Override
 	public String getPassword() {
@@ -66,8 +67,7 @@ public class UsersDetails implements UserDetails {
 	}
 
 	/**
-	 * UserDetailsクラスのユーザーネーム取得メソッド
-	 * ここではアカウント名
+	 * UserDetailsクラスのユーザー名取得ここではアカウント名
 	 */
 	@Override
 	public String getUsername() {
@@ -75,8 +75,8 @@ public class UsersDetails implements UserDetails {
 	}
 
 	/**
-	 * アカウント名とは別に定義されたユーザーネームを取得
-	 * (独自メソッド)
+	 * アカウント名とは別に定義されたユーザー名を取得(独自メソッド)
+	 * 
 	 * @return String
 	 */
 	public String getUserName() {
