@@ -10,9 +10,9 @@ public enum MessageManager {
     IS_NOT_NEW_PASSWORD("IsNotNewPassword"),
     DELETE_FAIRED("DeleteFailed"),
     INVALID_STR("InvalidStr"),
-    REGISTRARION_COMPLETE("complete", "登録"),
+    REGISTRARION_COMPLETE("complete","登録"),
     UPDATE_COMPLETE("complete", "更新"),
-    DELETE_COMPLETE("complete", "削除"),
+    DELETE_COMPLETE("complete","削除"),
     PASSWORD_UPDATE_COMPLETE("complete", "パスワードの更新");
 
     private String key;
@@ -28,10 +28,23 @@ public enum MessageManager {
         this.params = params;
     }
 
+    /**
+     * メッセージを取得する
+     * 
+     * @param messageSource
+     * @return メッセージ
+     */
     public String getMessage(MessageSource messageSource) {
         return messageSource.getMessage(key, params, Locale.JAPAN);
     }
 
+    /**
+     * メッセージを取得する
+     * 
+     * @param messageSource
+     * @param params
+     * @return メッセージ
+     */
     public String getMessage(MessageSource messageSource, Object... params) {
         return messageSource.getMessage(key, params, Locale.JAPAN);
     }

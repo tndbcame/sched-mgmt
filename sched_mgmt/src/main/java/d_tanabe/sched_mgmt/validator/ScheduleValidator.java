@@ -14,7 +14,6 @@ public class ScheduleValidator implements Validator {
 
     @Autowired
     MessageSource messagesource;
-
     @Autowired
     ScheduleService scheduleService;
 
@@ -32,13 +31,16 @@ public class ScheduleValidator implements Validator {
         try {
             int day_ = Integer.parseInt(form.getDay());
             Integer lastDay = scheduleService.getLastDayOfTheMonth(form.getYear(), form.getMonth());
-            if (lastDay < day_) {
 
-                errors.rejectValue("day", "PasswordForm.day",
+            //月の最終日より選択日付が大きい場合
+            if (lastDay < day_) {
+                errors.rejectValue("day", "ScheduleForm.day",
                         MessageManager.MAX_RANGE_OF_DAYS.getMessage(messagesource, lastDay));
             }
-        } catch (Exception e) {
-            errors.rejectValue("day", "PasswordForm.day",
+        } catch (NumberFormatException e) {
+            
+            //数値に変換できない場合は例外
+            errors.rejectValue("day", "ScheduleForm.day",
                     MessageManager.INVALID_STR.getMessage(messagesource));
         }
     }

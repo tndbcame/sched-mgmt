@@ -1,5 +1,6 @@
 package d_tanabe.sched_mgmt.service.Impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,32 @@ public class UsersServiceImpl implements UsersService {
 		Integer perPage,
 		Integer startIndex) {
 
-		return usersMapper.selectByUser(
+		List<Users> userList = new ArrayList<>();
+		List<Users> tmpUserList = usersMapper.selectByUser(
 			users.getStatus(),
 			users.getId(),
 			users.getAccountName(),
-			users.getUserName(),
+			users.getUserName(), 
 			perPage,
 			startIndex);
+		
+		// 画面表示用に設定する
+		for (Users user : tmpUserList) {
+			if ("1".equals(user.getStatus())) {
+				user.setStatus("有効");
+			} else if ("2".equals(user.getStatus())) {
+				user.setStatus("無効");
+			}
+			if ("1".equals(user.getRole())) {
+				user.setRole("管理者");
+			} else if ("2".equals(user.getRole())) {
+				user.setRole("一般");
+			}
+
+			userList.add(user);
+		}
+
+		return userList;
 	}
 
 	/**
@@ -91,7 +111,10 @@ public class UsersServiceImpl implements UsersService {
 	 * ユーザーを更新する
 	 */
 	@Override
-	public void updateUser(Users users, boolean adminFlg, boolean statusFlg) {
+	public void updateUser(
+	Users users,
+	boolean adminFlg,
+	boolean statusFlg) {
 
 		// 権限を設定
 		String role = "2";

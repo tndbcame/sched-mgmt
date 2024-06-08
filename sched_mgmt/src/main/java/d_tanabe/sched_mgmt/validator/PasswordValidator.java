@@ -14,7 +14,6 @@ public class PasswordValidator implements Validator {
 
     @Autowired
     MessageSource messagesource;
-
     @Autowired
     private UsersService usersService;
 
@@ -23,16 +22,19 @@ public class PasswordValidator implements Validator {
     public boolean supports(Class<?> clazz) {
         return PasswordForm.class.isAssignableFrom(clazz);
     }
-
+    
     @SuppressWarnings("null")
     @Override
     public void validate(Object target, Errors errors) {
         PasswordForm form = (PasswordForm) target;
 
+        //ユーザーの存在チェック
         if (!usersService.existsUser(form.getUserId(), form.getCurrentPassword())) {
             errors.rejectValue("currentPassword", "PasswordForm.currentPassword",
                     MessageManager.IS_NOT_USER.getMessage(messagesource));
         }
+
+        //新しいパスワード1,2が同値であることをチェック
         if (!form.getNewPassword().equals(form.getNewPassword2())) {
             errors.rejectValue("newPassword", "PasswordForm.newPassword",
                     MessageManager.IS_NOT_NEW_PASSWORD.getMessage(messagesource));
