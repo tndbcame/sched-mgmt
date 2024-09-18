@@ -37,6 +37,18 @@
 | library        | thymeleaf, ajax, mybatis                                          |
 | etc.           | Git, GitHub                                                       |
 
+## ⚪︎ ステップ数
+| language | files | code | comment | blank | total |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| Java | 31 | 1,140 | 533 | 355 | 2,028 |
+| CSS | 8 | 858 | 0 | 147 | 1,005 |
+| HTML | 11 | 472 | 1 | 6 | 479 |
+| JavaScript | 3 | 150 | 50 | 17 | 217 |
+| XML | 2 | 81 | 11 | 4 | 96 |
+| Groovy | 2 | 41 | 0 | 8 | 49 |
+| Batch | 1 | 41 | 30 | 22 | 93 |
+| YAML | 1 | 18 | 0 | 1 | 19 |
+| Java Properties | 3 | 16 | 3 | 2 | 21 |
 
 ## ⚪︎ 今後の予定
 
